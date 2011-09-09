@@ -6,27 +6,15 @@ package net.jorgeherskovic.medrec.shared;
  * a selection already in place. 
  */
 
-public class ReconciledMedication {
-	private Consolidation myConsolidation;
+public class ReconciledMedication extends Consolidation {
 	
 	public ReconciledMedication(Medication med) {
-		super();
-		this.myConsolidation=new Consolidation(med, new Medication(), 1.0, "Unique");
-		this.myConsolidation.setSelection(0);
+		super(med, new Medication(), 1.0, "Unique");
+		this.setSelection(0);
 	}
 	
 	public ReconciledMedication(Consolidation cons, int selection) {
-		super();
-		this.myConsolidation=cons;
-		this.myConsolidation.setSelection(selection);
+		super(cons.getMed1(), cons.getMed2(), cons.getScore(), cons.getExplanation());
+		this.setSelection(selection);
 	}
-	
-	public Consolidation getConsolidation() {
-		return myConsolidation;
-	}
-	
-	public Medication getSelectedMedication() {
-		return myConsolidation.getSelectedMedication();
-	}
-
 }

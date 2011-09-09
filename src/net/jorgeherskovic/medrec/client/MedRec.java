@@ -124,156 +124,28 @@ public class MedRec implements EntryPoint {
 		absolutePanel.add(btnDone, 737, 570);
 		btnDone.setSize("53px", "30px");
 
-		setTableHeadings(consolidatedTable, new String[] { "", "Entry",
+		String[] consolidatedHeadings=new String[] { "", "Entry",
 				"Origin", "Medication", "Dosage", "Frequency", "Start Date",
-				"End Date", "Form", "Relation" });
-		setTableHeadings(reconciledTable, new String[] { "", "Entry", "Origin",
+				"End Date", "Form", "Relation" };
+		String[] reconciledHeadings=new String[] { "", "Entry", "Origin",
 				"Medication", "Dosage", "Frequency", "Start Date", "End Date",
-				"Form", "Alerts" });
+				"Form", "Alerts" };
 
 		/* Read data */
 		SampleData myData = new SampleData();
 
-		populateConsolidatedTable(consolidatedTable, myData.consolidatedMeds);
-		populateReconciledTable(reconciledTable, myData.reconciledMeds);
+		ReconciledRenderer recRenderer=new ReconciledRenderer(reconciledTable, reconciledHeadings, myData.reconciledMeds);
+		ConsolidatedRenderer conRenderer=new ConsolidatedRenderer(consolidatedTable, consolidatedHeadings, myData.consolidatedMeds);
 
-		final InlineLabel nlnlblDragging = new InlineLabel("");
-		nlnlblDragging.setVisible(true);
-		absolutePanel.add(nlnlblDragging, 0, 574);
-
+		recRenderer.renderTable();
+		conRenderer.renderTable();
 	}
 
-	public void setTableHeadings(HTMLTable t, String[] headings) {
-		HTMLTable.CellFormatter h = t.getCellFormatter();
-
-		for (int i = 0; i < headings.length; i++) {
-			t.setHTML(0, i, headings[i]);
-			h.setStyleName(0, i, "TableHeading");
-		}
-	}
 
 	public void populateConsolidatedTable(DraggableFlexTable t,
 			Consolidation[] cons) {
-		HTMLTable.CellFormatter cf = t.getCellFormatter();
-		int currentRow = 1;
-
-		for (int i = 0; i < cons.length; i++) {
-			Medication m1 = cons[i].getMed1();
-			Medication m2 = cons[i].getMed2();
-			String lineSeparator;
-			int col = 0;
-
-			/* Create an HTML widget and make it draggable */
-
-			HTML handle = new HTML();
-			handle.setHTML("&nbsp;&nbsp;≣&nbsp;&nbsp;");
-
-			t.setWidget(currentRow, col++, handle);
-			t.getRowDragController().makeDraggable(handle);
-
-			t.setText(currentRow, col++, Integer.toString(i + 1));
-			t.setHTML(currentRow, col++, m1.getProvenance());
-
-			t.setHTML(currentRow, col++, m1.getMedicationName());
-			t.setHTML(currentRow, col++, m1.getDose() + " " + m1.getUnits());
-			t.setHTML(currentRow, col++, m1.getInstructions());
-			t.setHTML(currentRow, col++, m1.getStartDateString());
-			t.setHTML(currentRow, col++, m1.getEndDateString());
-			t.setHTML(currentRow, col++, m1.getFormulation());
-			t.setText(currentRow, col++, cons[i].getExplanation());
-
-			String thisStyle = "NoReconciliation";
-			if (cons[i].getScore() > 0.1) {
-				thisStyle = "PartialReconciliation";
-			}
-			if (cons[i].getScore() > 0.99) {
-				thisStyle = "FullReconciliation";
-			}
-			t.getRowFormatter().addStyleName(currentRow, "TableDesign");
-			t.getRowFormatter().addStyleName(currentRow, thisStyle);
-
-			/*
-			 * Apply the TableDesign style to each cell individually to get
-			 * borders
-			 */
-			int numCells = t.getCellCount(currentRow);
-			for (int j = 0; j < numCells; j++) {
-				cf.setStyleName(currentRow, j, "TableDesign");
-			}
-			currentRow += 1;
-
-			if (!m2.isEmpty()) {
-				col = 0;
-				HTML second_handle = new HTML();
-				second_handle.setHTML("&nbsp;&nbsp;≣&nbsp;&nbsp;");
-
-				t.setWidget(currentRow, col++, second_handle);
-				t.getRowDragController().makeDraggable(second_handle);
-
-				t.setText(currentRow, col++, Integer.toString(i + 1));
-				t.setHTML(currentRow, col++, m2.getProvenance());
-
-				t.setHTML(currentRow, col++, m2.getMedicationName());
-				t.setHTML(currentRow, col++, m2.getDose() + " " + m2.getUnits());
-				t.setHTML(currentRow, col++, m2.getInstructions());
-				t.setHTML(currentRow, col++, m2.getStartDateString());
-				t.setHTML(currentRow, col++, m2.getEndDateString());
-				t.setHTML(currentRow, col++, m2.getFormulation());
-				t.setText(currentRow, col++, cons[i].getExplanation());
-
-				t.getRowFormatter().addStyleName(currentRow, "TableDesign");
-				t.getRowFormatter().addStyleName(currentRow, thisStyle);
-
-				/*
-				 * Apply the TableDesign style to each cell individually to get
-				 * borders
-				 */
-				for (int j = 0; j < numCells; j++) {
-					cf.setStyleName(currentRow, j, "TableDesign");
-				}
-				currentRow += 1;
-
-			}
-		}
-
-		return;
 	}
 
 	public void populateReconciledTable(DraggableFlexTable t, Medication[] meds) {
-		HTMLTable.CellFormatter cf = t.getCellFormatter();
-
-		for (int i = 0; i < meds.length; i++) {
-			Medication m = meds[i];
-			int col = 0;
-
-			HTML handle = new HTML("&nbsp;&nbsp;≣&nbsp;&nbsp;");
-			t.setWidget(i + 1, col++, handle);
-			t.getRowDragController().makeDraggable(handle);
-
-			t.setText(i + 1, col++, Integer.toString(i + 1));
-			t.setHTML(i + 1, col++, m.getProvenance());
-			t.setHTML(i + 1, col++, m.getMedicationName());
-			t.setHTML(i + 1, col++, m.getDose() + " " + m.getUnits());
-			t.setHTML(i + 1, col++, m.getInstructions());
-			t.setHTML(i + 1, col++, m.getStartDateString());
-			t.setHTML(i + 1, col++, m.getEndDateString());
-			t.setHTML(i + 1, col++, m.getFormulation());
-			t.setText(i + 1, col++, "");
-
-			String thisStyle = "FullReconciliation";
-			t.getRowFormatter().addStyleName(i + 1, "TableDesign");
-			t.getRowFormatter().addStyleName(i + 1, thisStyle);
-
-			/*
-			 * Apply the TableDesign style to each cell individually to get
-			 * borders
-			 */
-			int numCells = t.getCellCount(i + 1);
-			for (int j = 0; j < numCells; j++) {
-				cf.setStyleName(i + 1, j, "TableDesign");
-			}
-		}
-
-		return;
 	}
 }
