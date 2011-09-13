@@ -5,7 +5,7 @@
 h1 {
   font-size: 2em;
   font-weight: bold;
-  color: #777777;
+  color: black;
   margin: 40px 0px 70px;
   text-align: center;
 }
@@ -36,34 +36,74 @@ h1 {
 	border: 1px;
 }
 
+.TableDesign {
+	border-collapse: collapse;
+	table-layout: auto;
+	width: 95%;
+}
+
 .TableHeading {
 	border: 1px solid Black;
 	font-weight: bold;
+	text-align: center;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	font-size: 110%;
 }
-.TableDesign {
+
+.EntryNumber {
+	text-align: right;
+	padding-right: 5px;
+}
+
+.SingleRowDesign {
 	border-top: 1px solid Black;
+	border-right: 1px solid black;
+	border-left: 1px solid black;
+	border-bottom: 1px solid Black;
+	border: 1px solid Black;	
+}
+
+.MultiRowTopDesign {
+	border-top: 1px solid Black;
+	border-right: 1px solid black;
+	border-left: 1px solid black;
+}
+
+.MultiRowMiddleDesign {
+	border-right: 1px solid black;
+	border-left: 1px solid black;
+}
+
+.MultiRowBottomDesign {
 	border-right: 1px solid black;
 	border-bottom: 1px solid black;
 	border-left: 1px solid black;
-	border: 1px solid black;
-	border-collapse: collapse;
-	table-layout: auto;
 }
 
 .PartialReconciliation {
-	background-color: yellow;
+	background-color: #FAFAA2;
 }
 
 .FullReconciliation {
-	background-color: green;
+	background-color: #C3FFB8;
 }
 
 .NoReconciliation {
-	background-color: red;
+	background-color: #FF8A8A;
 }
 
 .med-table-positioner {
 	z-index: 1;
 	border-top: 2px solid green;
 	margin-top: 2px;	
+}
+.big-label {
+	font-variant: small-caps;
+	font-size: 120%;
+	font-family: sans-serif;
+	font-weight: bold;
+	text-align: center;
 }

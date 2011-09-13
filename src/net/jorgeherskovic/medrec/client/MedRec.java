@@ -1,36 +1,16 @@
 package net.jorgeherskovic.medrec.client;
 
-import net.jorgeherskovic.medrec.shared.Consolidation;
-import net.jorgeherskovic.medrec.shared.Medication;
+import net.jorgeherskovic.medrec.client.event.RedrawEvent;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.DragEndEvent;
-import com.google.gwt.event.dom.client.DragEndHandler;
-import com.google.gwt.event.dom.client.DragEvent;
-import com.google.gwt.event.dom.client.DragStartEvent;
-import com.google.gwt.event.dom.client.DragStartHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HTMLTable;
+import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.TabPanel;
-import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.InlineLabel;
-import com.google.gwt.user.client.ui.FlexTable;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -43,9 +23,15 @@ public class MedRec implements EntryPoint {
 	/**
 	 * This is the entry point method.
 	 */
+
 	public void onModuleLoad() {
 		RootPanel rootPanel = RootPanel.get();
 		rootPanel.setSize("800px", "600px");
+
+		/* Read data */
+		SampleData myData = new SampleData();
+
+		SimpleEventBus bus = new SimpleEventBus();
 
 		AbsolutePanel absolutePanel = new AbsolutePanel();
 		rootPanel.add(absolutePanel, 0, 0);
@@ -84,11 +70,13 @@ public class MedRec implements EntryPoint {
 		dockPanel.setSize("800px", "252px");
 
 		Label lblConsolidatedRecord = new Label("Consolidated Record");
+		lblConsolidatedRecord.setStyleName("big-label");
 		lblConsolidatedRecord
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		dockPanel.add(lblConsolidatedRecord, DockPanel.NORTH);
 
-		DraggableFlexTable consolidatedTable = new DraggableFlexTable(row_dc);
+		DraggableFlexTable consolidatedTable = new DraggableFlexTable(row_dc,
+				myData.consolidatedMeds);
 		consolidatedTable.setStyleName("TableDesign");
 		dockPanel.add(consolidatedTable, DockPanel.CENTER);
 
@@ -102,19 +90,21 @@ public class MedRec implements EntryPoint {
 		dockPanel_1.setSize("800px", "252px");
 
 		Label lblReconciledRecord = new Label("Reconciled Record");
+		lblReconciledRecord.setStyleName("big-label");
 		lblReconciledRecord
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		dockPanel_1.add(lblReconciledRecord, DockPanel.NORTH);
 
-		DraggableFlexTable reconciledTable = new DraggableFlexTable(row_dc);
+		DraggableFlexTable reconciledTable = new DraggableFlexTable(row_dc,
+				myData.reconciledMeds);
 		reconciledTable.setStyleName("TableDesign");
 		dockPanel_1.add(reconciledTable, DockPanel.CENTER);
 
 		/* Instantiate drop controllers */
 		FlexTableRowDropController ct_dc = new FlexTableRowDropController(
-				consolidatedTable);
+				consolidatedTable, bus);
 		FlexTableRowDropController rc_dc = new FlexTableRowDropController(
-				reconciledTable);
+				reconciledTable, bus);
 
 		/* Connect the drop controllers to the drag controller */
 		row_dc.registerDropController(ct_dc);
@@ -124,28 +114,22 @@ public class MedRec implements EntryPoint {
 		absolutePanel.add(btnDone, 737, 570);
 		btnDone.setSize("53px", "30px");
 
-		String[] consolidatedHeadings=new String[] { "", "Entry",
-				"Origin", "Medication", "Dosage", "Frequency", "Start Date",
-				"End Date", "Form", "Relation" };
-		String[] reconciledHeadings=new String[] { "", "Entry", "Origin",
-				"Medication", "Dosage", "Frequency", "Start Date", "End Date",
+		String[] consolidatedHeadings = new String[] { "", "#", "Origin",
+				"Medication", "Dosage", "Freq.", "Start<br>Date", "End<br>Date",
+				"Form", "Relation" };
+		String[] reconciledHeadings = new String[] { "", "#", "Origin",
+				"Medication", "Dosage", "Freq.", "Start<br>Date", "End<br>Date",
 				"Form", "Alerts" };
 
-		/* Read data */
-		SampleData myData = new SampleData();
+		@SuppressWarnings("unused")
+		ReconciledRenderer recRenderer = new ReconciledRenderer(
+				reconciledTable, reconciledHeadings, bus);
+		@SuppressWarnings("unused")
+		ConsolidatedRenderer conRenderer = new ConsolidatedRenderer(
+				consolidatedTable, consolidatedHeadings, bus);
 
-		ReconciledRenderer recRenderer=new ReconciledRenderer(reconciledTable, reconciledHeadings, myData.reconciledMeds);
-		ConsolidatedRenderer conRenderer=new ConsolidatedRenderer(consolidatedTable, consolidatedHeadings, myData.consolidatedMeds);
-
-		recRenderer.renderTable();
-		conRenderer.renderTable();
+		// Start by drawing the initial tables
+		bus.fireEvent(new RedrawEvent()); 
 	}
 
-
-	public void populateConsolidatedTable(DraggableFlexTable t,
-			Consolidation[] cons) {
-	}
-
-	public void populateReconciledTable(DraggableFlexTable t, Medication[] meds) {
-	}
 }

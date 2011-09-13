@@ -21,7 +21,8 @@ public class Medication {
 	private String provenance;
 	static Date nullDate = new Date(0);
 	static DateTimeFormat myDTFormat = DateTimeFormat.getFormat("yyyy.MM.dd");
-	static DateTimeFormat myOutputFormat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT);
+	static DateTimeFormat myOutputFormat = DateTimeFormat
+			.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT);
 
 	/**
 	 * @return the provenance
@@ -214,6 +215,14 @@ public class Medication {
 		} catch (Exception e) {
 			this.endDate = Medication.nullDate;
 		}
+	}
+
+	public boolean equals(Medication other) {
+		return (other.getMedicationName() == this.getMedicationName()
+				&& other.getDose() == this.getDose()
+				&& other.getUnits() == this.getUnits()
+				&& other.getFormulation() == this.getFormulation() 
+				&& other.getInstructions() == this.getInstructions());
 	}
 
 }

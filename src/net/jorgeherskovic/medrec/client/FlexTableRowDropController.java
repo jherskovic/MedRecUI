@@ -16,7 +16,9 @@ package net.jorgeherskovic.medrec.client;
 
 /* MODIFIED BY JORGE R. HERSKOVIC */
 
-import com.google.gwt.user.client.ui.FlexTable;
+import net.jorgeherskovic.medrec.client.event.RowDroppedEvent;
+
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.InsertPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -32,88 +34,100 @@ import com.allen_sauer.gwt.dnd.client.util.WidgetLocation;
 /**
  * Allows one or more table rows to be dropped into an existing table.
  */
-public final class FlexTableRowDropController extends AbstractPositioningDropController {
+public final class FlexTableRowDropController extends
+		AbstractPositioningDropController {
 
-  private static final String CSS_DEMO_TABLE_POSITIONER = "med-table-positioner";
+	private static final String CSS_DEMO_TABLE_POSITIONER = "med-table-positioner";
 
-  private FlexTable flexTable;
+	private DraggableFlexTable flexTable;
+	private SimpleEventBus bus;
 
-  private InsertPanel flexTableRowsAsIndexPanel = new InsertPanel() {
+	private InsertPanel flexTableRowsAsIndexPanel = new InsertPanel() {
 
-    public void add(Widget w) {
-      throw new UnsupportedOperationException();
-    }
+		public void add(Widget w) {
+			throw new UnsupportedOperationException();
+		}
 
-    public Widget getWidget(int index) {
-      return flexTable.getWidget(index, 0);
-    }
+		public Widget getWidget(int index) {
+			return flexTable.getWidget(index, 0);
+		}
 
-    public int getWidgetCount() {
-      return flexTable.getRowCount();
-    }
+		public int getWidgetCount() {
+			return flexTable.getRowCount();
+		}
 
-    public int getWidgetIndex(Widget child) {
-      throw new UnsupportedOperationException();
-    }
+		public int getWidgetIndex(Widget child) {
+			throw new UnsupportedOperationException();
+		}
 
-    public void insert(Widget w, int beforeIndex) {
-      throw new UnsupportedOperationException();
-    }
+		public void insert(Widget w, int beforeIndex) {
+			throw new UnsupportedOperationException();
+		}
 
-    public boolean remove(int index) {
-      throw new UnsupportedOperationException();
-    }
-  };
+		public boolean remove(int index) {
+			throw new UnsupportedOperationException();
+		}
+	};
 
-  private Widget positioner = null;
+	private Widget positioner = null;
 
-  private int targetRow;
+	private int targetRow;
 
-  public FlexTableRowDropController(FlexTable flexTable) {
-    super(flexTable);
-    this.flexTable = flexTable;
-  }
+	public FlexTableRowDropController(DraggableFlexTable flexTable,
+			SimpleEventBus bus) {
+		super(flexTable);
+		this.flexTable = flexTable;
+		this.bus = bus;
+	}
 
-  @Override
-  public void onDrop(DragContext context) {
-    FlexTableRowDragController trDragController = (FlexTableRowDragController) context.dragController;
-    FlexTableUtil.moveRow(trDragController.getDraggableTable(), flexTable,
-        trDragController.getDragRow(), targetRow + 1);
-    super.onDrop(context);
-  }
+	@Override
+	public void onDrop(DragContext context) {
+		FlexTableRowDragController trDragController = (FlexTableRowDragController) context.dragController;
+		bus.fireEvent(new RowDroppedEvent(trDragController.getDraggableTable(),
+				flexTable, trDragController.getDragRow(), targetRow + 1));
+		//FlexTableUtil.moveRow(trDragController.getDraggableTable(), flexTable,
+		//		trDragController.getDragRow(), targetRow + 1);
+		super.onDrop(context);
+	}
 
-  @Override
-  public void onEnter(DragContext context) {
-    super.onEnter(context);
-    positioner = newPositioner(context);
-  }
+	@Override
+	public void onEnter(DragContext context) {
+		super.onEnter(context);
+		positioner = newPositioner(context);
+	}
 
-  @Override
-  public void onLeave(DragContext context) {
-    positioner.removeFromParent();
-    positioner = null;
-    super.onLeave(context);
-  }
+	@Override
+	public void onLeave(DragContext context) {
+		positioner.removeFromParent();
+		positioner = null;
+		super.onLeave(context);
+	}
 
-  @Override
-  public void onMove(DragContext context) {
-    super.onMove(context);
-    targetRow = DOMUtil.findIntersect(flexTableRowsAsIndexPanel, new CoordinateLocation(
-        context.mouseX, context.mouseY), LocationWidgetComparator.BOTTOM_HALF_COMPARATOR) - 1;
+	@Override
+	public void onMove(DragContext context) {
+		super.onMove(context);
+		targetRow = DOMUtil.findIntersect(flexTableRowsAsIndexPanel,
+				new CoordinateLocation(context.mouseX, context.mouseY),
+				LocationWidgetComparator.BOTTOM_HALF_COMPARATOR) - 1;
 
-    if (flexTable.getRowCount() > 0) {
-      Widget w = flexTable.getWidget(targetRow == -1 ? 0 : targetRow, 0);
-      Location widgetLocation = new WidgetLocation(w, context.boundaryPanel);
-      Location tableLocation = new WidgetLocation(flexTable, context.boundaryPanel);
-      context.boundaryPanel.add(positioner, tableLocation.getLeft(), widgetLocation.getTop()
-          + (targetRow == -1 ? 0 : w.getOffsetHeight()));
-    }
-  }
+		if (flexTable.getRowCount() > 0) {
+			Widget w = flexTable.getWidget(targetRow == -1 ? 0 : targetRow, 0);
+			Location widgetLocation = new WidgetLocation(w,
+					context.boundaryPanel);
+			Location tableLocation = new WidgetLocation(flexTable,
+					context.boundaryPanel);
+			context.boundaryPanel.add(
+					positioner,
+					tableLocation.getLeft(),
+					widgetLocation.getTop()
+							+ (targetRow == -1 ? 0 : w.getOffsetHeight()));
+		}
+	}
 
-  Widget newPositioner(DragContext context) {
-    Widget p = new SimplePanel();
-    p.addStyleName(CSS_DEMO_TABLE_POSITIONER);
-    p.setPixelSize(flexTable.getOffsetWidth(), 1);
-    return p;
-  }
+	Widget newPositioner(DragContext context) {
+		Widget p = new SimplePanel();
+		p.addStyleName(CSS_DEMO_TABLE_POSITIONER);
+		p.setPixelSize(flexTable.getOffsetWidth(), 1);
+		return p;
+	}
 }

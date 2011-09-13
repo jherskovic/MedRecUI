@@ -27,7 +27,7 @@ public class SampleData {
 		this.reconciledMeds = new ArrayList<ReconciledMedication>(5);
 		@SuppressWarnings("unused")
 		boolean b = this.reconciledMeds.add(new ReconciledMedication(new Medication(reconciled[0])));
-		b=this.reconciledMeds.add(new ReconciledMedication(new Medication(reconciled[1])));
+		b=this.reconciledMeds.add(new ReconciledMedication(new Consolidation(new Medication(reconciled[1]), new Medication(reconciled[1]), 1.0, "Identical"), 0));
 		b=this.reconciledMeds.add(new ReconciledMedication(new Medication(reconciled[2])));
 		b=this.reconciledMeds.add(new ReconciledMedication(new Medication(reconciled[3])));
 		

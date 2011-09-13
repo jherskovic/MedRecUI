@@ -1,27 +1,34 @@
 package net.jorgeherskovic.medrec.client;
 
 import java.util.List;
+import java.util.Map;
 
-import com.google.gwt.user.client.ui.HTML;
-
+import net.jorgeherskovic.medrec.client.event.RedrawEvent;
+import net.jorgeherskovic.medrec.client.event.RowDroppedEvent;
 import net.jorgeherskovic.medrec.shared.Consolidation;
 import net.jorgeherskovic.medrec.shared.Medication;
-import net.jorgeherskovic.medrec.shared.ReconciledMedication;
+
+import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HTML;
 
 public class ReconciledRenderer extends TableRenderer {
 
 	public ReconciledRenderer(DraggableFlexTable table, String[] headings,
-			List<ReconciledMedication> meds) {
-		super(table, headings, meds);
+			SimpleEventBus bus) {
+		super(table, headings, bus);
 	}
 
 	@Override
 	public void renderTable() {
 		DraggableFlexTable t = this.getAttachedTable();
-		List<Consolidation> meds = this.getMedList();
+		List<Consolidation> meds = t.getMedList();
 
 		t.removeAllRows();
-		this.renderTableHeadings("TableHeadings");
+		Map<HTML, Consolidation> rowMapping = t.getRowMapping();
+		rowMapping.clear();
+
+		this.renderTableHeadings("TableHeading");
 
 		for (int i = 0; i < meds.size(); i++) {
 			Medication m = meds.get(i).getSelectedMedication();
@@ -30,6 +37,8 @@ public class ReconciledRenderer extends TableRenderer {
 			HTML handle = new HTML("&nbsp;&nbsp;≣&nbsp;&nbsp;");
 			t.setWidget(i + 1, col++, handle);
 			t.getRowDragController().makeDraggable(handle);
+
+			rowMapping.put(handle, meds.get(i));
 
 			t.setText(i + 1, col++, Integer.toString(i + 1));
 			t.setHTML(i + 1, col++, m.getProvenance());
@@ -41,18 +50,45 @@ public class ReconciledRenderer extends TableRenderer {
 			t.setHTML(i + 1, col++, m.getFormulation());
 			t.setText(i + 1, col++, "");
 
-			t.getRowFormatter().addStyleName(i + 1, "TableDesign");
+			t.getRowFormatter().addStyleName(i + 1, "SingleRowDesign");
 			t.getRowFormatter().addStyleName(i + 1, "FullReconciliation");
-
 			/*
 			 * Apply the TableDesign style to each cell individually to get
 			 * borders
 			 */
-			this.applyStyleToAllCellsInRow(i + 1, "TableDesign");
+			this.applyStyleToAllCellsInRow(i + 1, "SingleRowDesign");
+			t.getCellFormatter().addStyleName(i + 1, 1, "EntryNumber");
 		}
 
 		return;
 
+	}
+
+	@Override
+	public void handleDroppedRow(RowDroppedEvent event) {
+		HTML handle = (HTML) event.getSourceTable().getWidget(
+				event.getSourceRow(), 0);
+		Consolidation cons = event.getSourceTable().getRowMapping().get(handle);
+		Medication selected = cons.getSelectedMedication();
+		if (selected == null) {
+			Window.alert("This should never happen.");
+		}
+		// Window.alert("Dragged medication:" +
+		// selected.getMedicationName()+" "+selected.getDose());
+		int targetPosition = event.getDestRow() - 1;
+
+		this.getAttachedTable().insertMed(targetPosition, cons);
+		// Find all rows in the original table that contain the medications in
+		// this one, and delete them.
+		// We will go in reverse order as not to restart the search.
+		List<? extends Consolidation> otherList = event.getSourceTable()
+				.getMedList();
+		for (int i = otherList.size() - 1; i >= 0; i--) {
+			if (otherList.get(i).same_meds(cons)) {
+				otherList.remove(i);
+			}
+		}
+		bus.fireEvent(new RedrawEvent());
 	}
 
 }

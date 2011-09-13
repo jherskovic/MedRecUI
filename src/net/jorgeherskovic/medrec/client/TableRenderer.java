@@ -1,28 +1,48 @@
 package net.jorgeherskovic.medrec.client;
 
-import java.util.List;
+import net.jorgeherskovic.medrec.client.event.RedrawEvent;
+import net.jorgeherskovic.medrec.client.event.RedrawEventHandler;
+import net.jorgeherskovic.medrec.client.event.RowDroppedEvent;
+import net.jorgeherskovic.medrec.client.event.RowDroppedEventHandler;
 
-import net.jorgeherskovic.medrec.shared.Consolidation;
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.HTMLTable;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 
 public abstract class TableRenderer {
-	private DraggableFlexTable attachedTable;
-	private List<? extends Consolidation> medList;
+	private final DraggableFlexTable attachedTable;
 	private String[] headings;
+	protected final SimpleEventBus bus;
 
-	public TableRenderer(DraggableFlexTable table,
-						 String[] headings, 
-			List<? extends Consolidation> meds) {
+	public TableRenderer(DraggableFlexTable table, String[] headings,
+			SimpleEventBus bus) {
 		this.attachedTable = table;
-		this.medList = meds;
 		this.headings = headings;
+
+		bus.addHandler(RowDroppedEvent.TYPE, new RowDroppedEventHandler() {
+
+			public void onRowDropped(RowDroppedEvent event) {
+				// Only react to messages targeted at THIS table
+				if (event.getDestTable() == TableRenderer.this.attachedTable
+						&& event.getDestTable() != event.getSourceTable()) {
+					TableRenderer.this.handleDroppedRow(event);
+				}
+			}
+		});
+
+		bus.addHandler(RedrawEvent.TYPE, new RedrawEventHandler() {
+
+			public void onRedraw(RedrawEvent event) {
+				// TODO Auto-generated method stub
+				TableRenderer.this.renderTable();
+			}
+
+		});
+
+		this.bus = bus;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Consolidation> getMedList() {
-		return (List<Consolidation>) medList;
-	}
+	public abstract void handleDroppedRow(RowDroppedEvent event);
 
 	public DraggableFlexTable getAttachedTable() {
 		return attachedTable;
@@ -35,14 +55,6 @@ public abstract class TableRenderer {
 		}
 	}
 
-	public void insertMed(int above_what, Consolidation med) {
-		this.getMedList().add(above_what, med);
-	}
-
-	public void deleteMed(int which_one) {
-		medList.remove(which_one);
-	}
-
 	public void renderTableHeadings(String style) {
 		HTMLTable.CellFormatter h = attachedTable.getCellFormatter();
 
@@ -52,5 +64,9 @@ public abstract class TableRenderer {
 		}
 	}
 
+	/*
+	 * renderTable has to fill out the Widget->? extends Consolidation mapping
+	 * as well.
+	 */
 	public abstract void renderTable();
 }
