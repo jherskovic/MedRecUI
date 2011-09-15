@@ -8,13 +8,14 @@ import net.jorgeherskovic.medrec.client.event.RowDroppedEventHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.HTMLTable;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
+import com.google.gwt.user.client.ui.HTML;
 
 public abstract class TableRenderer {
 	private final DraggableFlexTable attachedTable;
 	private String[] headings;
 	protected final SimpleEventBus bus;
-	protected final String dragToken="&nbsp;[DRAG]&nbsp;";
-	
+	protected final String dragToken = "&nbsp;[DRAG]&nbsp;";
+
 	public TableRenderer(DraggableFlexTable table, String[] headings,
 			SimpleEventBus bus) {
 		this.attachedTable = table;
@@ -64,10 +65,17 @@ public abstract class TableRenderer {
 	}
 
 	public void renderTableHeadings(String style) {
+		/*
+		 * Uses an HTML widget instead of calling setHTML directly because, for
+		 * certain drag-and-drop functionality, there *must* be Widgets in the
+		 * first cells
+		 */
 		HTMLTable.CellFormatter h = attachedTable.getCellFormatter();
 
 		for (int i = 0; i < headings.length; i++) {
-			attachedTable.setHTML(0, i, headings[i]);
+			HTML handle = new HTML();
+			handle.setHTML(headings[i]);
+			attachedTable.setWidget(0, i, handle);
 			h.setStyleName(0, i, style);
 		}
 	}

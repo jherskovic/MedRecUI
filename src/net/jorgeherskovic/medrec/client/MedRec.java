@@ -27,15 +27,15 @@ public class MedRec implements EntryPoint {
 	 */
 
 	public void onModuleLoad() {
-		RootPanel rootPanel = RootPanel.get();
+		RootPanel rootPanel = RootPanel.get("insert_app_here");
 		rootPanel.setSize("800px", "600px");
 
 		/* Read data */
 		SampleData myData = new SampleData();
-		String[] consolidatedHeadings = new String[] { "", "#", "Origin",
+		String[] consolidatedHeadings = new String[] { "&nbsp;", "#", "Origin",
 				"Medication", "Dosage", "Freq.", "Start<br>Date",
 				"End<br>Date", "Form", "Relation" };
-		String[] reconciledHeadings = new String[] { "", "#", "Origin",
+		String[] reconciledHeadings = new String[] { "&nbsp;", "#", "Origin",
 				"Medication", "Dosage", "Freq.", "Start<br>Date",
 				"End<br>Date", "Form", "Alerts" };
 
@@ -150,6 +150,9 @@ public class MedRec implements EntryPoint {
 		row_dc.registerDropController(ct_dc);
 		row_dc.registerDropController(rc_dc);
 
+		// Make the "loading" label disappear just before we start running.
+		RootPanel.get("LoadingLabel").setVisible(false);
+		
 		// Start by drawing the initial tables
 		bus.fireEvent(new RedrawEvent());
 	}
