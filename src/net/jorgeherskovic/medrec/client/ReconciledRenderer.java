@@ -14,6 +14,10 @@ import com.google.gwt.user.client.ui.HTML;
 
 public class ReconciledRenderer extends TableRenderer {
 
+	private static String[] columnStyles = { "DragHandle", "EntryNumber",
+			"Origin", "Medication", "Dosage", "Frequency", "Date", "Date",
+			"Form", "Alert" };
+
 	public ReconciledRenderer(DraggableFlexTable table, String[] headings,
 			SimpleEventBus bus) {
 		super(table, headings, bus);
@@ -34,7 +38,7 @@ public class ReconciledRenderer extends TableRenderer {
 			Medication m = meds.get(i).getSelectedMedication();
 			int col = 0;
 
-			HTML handle = new HTML("&nbsp;&nbsp;≣&nbsp;&nbsp;");
+			HTML handle = new HTML(this.dragToken);
 			t.setWidget(i + 1, col++, handle);
 			t.getRowDragController().makeDraggable(handle);
 
@@ -57,7 +61,7 @@ public class ReconciledRenderer extends TableRenderer {
 			 * borders
 			 */
 			this.applyStyleToAllCellsInRow(i + 1, "SingleRowDesign");
-			t.getCellFormatter().addStyleName(i + 1, 1, "EntryNumber");
+			this.applyStyleArrayToRow(i + 1, columnStyles);
 		}
 
 		return;

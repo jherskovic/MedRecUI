@@ -11,11 +11,21 @@ import net.jorgeherskovic.medrec.shared.ReconciledMedication;
 
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
 public class ConsolidatedRenderer extends TableRenderer {
+	private static String[] columnStyles = { "DragHandle", "EntryNumber",
+			"Origin", "Medication", "Dosage", "Frequency", "Date", "Date",
+			"Form", "Relation" };
+
 	public ConsolidatedRenderer(DraggableFlexTable table, String[] headings,
 			SimpleEventBus bus) {
 		super(table, headings, bus);
+	}
+
+	private void makeCellDoubleHeight(int row, int col) {
+		//this.getAttachedTable().getFlexCellFormatter().setRowSpan(row, col, 2);
+		this.getAttachedTable().getCellFormatter().setVerticalAlignment(row, col, HasVerticalAlignment.ALIGN_BOTTOM);
 	}
 
 	@Override
@@ -40,7 +50,7 @@ public class ConsolidatedRenderer extends TableRenderer {
 			/* Create an HTML widget and make it draggable */
 
 			HTML handle = new HTML();
-			handle.setHTML("&nbsp;&nbsp;≣&nbsp;&nbsp;");
+			handle.setHTML(this.dragToken);
 
 			t.setWidget(currentRow, col++, handle);
 			t.getRowDragController().makeDraggable(handle);
@@ -51,7 +61,8 @@ public class ConsolidatedRenderer extends TableRenderer {
 			t.setHTML(currentRow, col++, m1.getProvenance());
 
 			t.setHTML(currentRow, col++, m1.getMedicationName());
-			t.setHTML(currentRow, col++, m1.getDose() + " " + m1.getUnits());
+			String dosage1 = m1.getDose() + " " + m1.getUnits();
+			t.setHTML(currentRow, col++, dosage1);
 			t.setHTML(currentRow, col++, m1.getInstructions());
 			t.setHTML(currentRow, col++, m1.getStartDateString());
 			t.setHTML(currentRow, col++, m1.getEndDateString());
@@ -68,28 +79,28 @@ public class ConsolidatedRenderer extends TableRenderer {
 			t.getRowFormatter().addStyleName(currentRow, thisStyle);
 
 			String cellFormatStyle;
-			
-			if (this_cons.length==1) {
-				cellFormatStyle="SingleRowDesign";
+
+			if (this_cons.length == 1) {
+				cellFormatStyle = "SingleRowDesign";
 			} else {
-				cellFormatStyle="MultiRowTopDesign";
+				cellFormatStyle = "MultiRowTopDesign";
 			}
 
 			t.getRowFormatter().addStyleName(currentRow, cellFormatStyle);
-			
+
 			/*
 			 * Apply the TableDesign style to each cell individually to get
 			 * borders
 			 */
 			this.applyStyleToAllCellsInRow(currentRow, cellFormatStyle);
-			t.getCellFormatter().addStyleName(currentRow, 1, "EntryNumber");
+			this.applyStyleArrayToRow(currentRow, columnStyles);
 
 			currentRow += 1;
 
 			if (!m2.isEmpty()) {
 				col = 0;
 				HTML second_handle = new HTML();
-				second_handle.setHTML("&nbsp;&nbsp;≣&nbsp;&nbsp;");
+				second_handle.setHTML(this.dragToken);
 				Consolidation reverse_cons = new ReconciledMedication(
 						this_cons, 1);
 
@@ -97,17 +108,63 @@ public class ConsolidatedRenderer extends TableRenderer {
 				t.getRowDragController().makeDraggable(second_handle);
 
 				t.setText(currentRow, col++, Integer.toString(i + 1));
-				t.setHTML(currentRow, col++, m2.getProvenance());
+				if (m2.getProvenance().equals(m1.getProvenance())) {
+					t.addCell(currentRow);
+					makeCellDoubleHeight(currentRow - 1, col++);
+				} else {
+					t.setHTML(currentRow, col++, m2.getProvenance());
+				}
 
-				t.setHTML(currentRow, col++, m2.getMedicationName());
-				t.setHTML(currentRow, col++, m2.getDose() + " " + m2.getUnits());
-				t.setHTML(currentRow, col++, m2.getInstructions());
-				t.setHTML(currentRow, col++, m2.getStartDateString());
-				t.setHTML(currentRow, col++, m2.getEndDateString());
-				t.setHTML(currentRow, col++, m2.getFormulation());
-				t.setText(currentRow, col++, this_cons.getExplanation());
+				if (m2.getMedicationName().equals(m1.getMedicationName())) {
+					t.addCell(currentRow);
+					makeCellDoubleHeight(currentRow - 1, col++);
+				} else {
+					t.setHTML(currentRow, col++, m2.getMedicationName());
+				}
 
-				t.getRowFormatter().addStyleName(currentRow, "MultiRowBottomDesign");
+				String dosage2 = m2.getDose() + " " + m2.getUnits();
+				if (dosage2.equals(dosage1)) {
+					t.addCell(currentRow);
+					makeCellDoubleHeight(currentRow - 1, col++);
+				} else {
+					t.setHTML(currentRow, col++, dosage2);
+				}
+
+				if (m2.getInstructions().equals(m1.getInstructions())) {
+					t.addCell(currentRow);
+					makeCellDoubleHeight(currentRow - 1, col++);
+				} else {
+					t.setHTML(currentRow, col++, m2.getInstructions());
+				}
+
+				if (m2.getStartDateString().equals(m1.getStartDateString())) {
+					t.addCell(currentRow);
+					makeCellDoubleHeight(currentRow - 1, col++);
+				} else {
+					t.setHTML(currentRow, col++, m2.getStartDateString());
+				}
+
+				if (m2.getEndDateString().equals(m1.getEndDateString())) {
+					t.addCell(currentRow);
+					makeCellDoubleHeight(currentRow - 1, col++);
+				} else {
+					t.setHTML(currentRow, col++, m2.getEndDateString());
+				}
+
+				if (m2.getFormulation().equals(m1.getFormulation())) {
+					t.addCell(currentRow);
+					makeCellDoubleHeight(currentRow - 1, col++);
+				} else {
+					t.setHTML(currentRow, col++, m2.getFormulation());
+				}
+
+				// t.setText(currentRow, col++, this_cons.getExplanation());
+				t.addCell(currentRow);
+				makeCellDoubleHeight(currentRow - 1, col++); // Make explanation
+																// double height
+
+				t.getRowFormatter().addStyleName(currentRow,
+						"MultiRowBottomDesign");
 				t.getRowFormatter().addStyleName(currentRow, thisStyle);
 
 				rowMapping.put(second_handle, reverse_cons);
@@ -116,8 +173,9 @@ public class ConsolidatedRenderer extends TableRenderer {
 				 * Apply the TableDesign style to each cell individually to get
 				 * borders
 				 */
-				this.applyStyleToAllCellsInRow(currentRow, "MultiRowBottomDesign");
-				t.getCellFormatter().addStyleName(currentRow, 1, "EntryNumber");
+				this.applyStyleToAllCellsInRow(currentRow,
+						"MultiRowBottomDesign");
+				this.applyStyleArrayToRow(currentRow, columnStyles);
 				currentRow += 1;
 
 			}

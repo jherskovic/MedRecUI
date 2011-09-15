@@ -13,7 +13,8 @@ public abstract class TableRenderer {
 	private final DraggableFlexTable attachedTable;
 	private String[] headings;
 	protected final SimpleEventBus bus;
-
+	protected final String dragToken="&nbsp;[DRAG]&nbsp;";
+	
 	public TableRenderer(DraggableFlexTable table, String[] headings,
 			SimpleEventBus bus) {
 		this.attachedTable = table;
@@ -52,6 +53,13 @@ public abstract class TableRenderer {
 		CellFormatter cf = attachedTable.getCellFormatter();
 		for (int j = 0; j < attachedTable.getCellCount(rownum); j++) {
 			cf.setStyleName(rownum, j, styleName);
+		}
+	}
+
+	public void applyStyleArrayToRow(int rownum, String[] styles) {
+		CellFormatter cf = attachedTable.getCellFormatter();
+		for (int j = 0; j < attachedTable.getCellCount(rownum); j++) {
+			cf.setStyleName(rownum, j, styles[j]);
 		}
 	}
 
