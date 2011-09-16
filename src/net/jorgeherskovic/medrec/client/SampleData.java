@@ -35,7 +35,7 @@ public class SampleData {
 		b=this.consolidatedMeds.add(new Consolidation(new Medication(medlist1[0]), new Medication(
 				medlist2[0]), 0.6, "Brand/Generic"));
 		b=this.consolidatedMeds.add(new Consolidation(new Medication(medlist1[1]), new Medication(
-						medlist2[1]), 0.6, "Brand/Generic"));
+						medlist2[1]), 0.6, "Combo drug"));
 		b=this.consolidatedMeds.add(new Consolidation(new Medication(medlist1[2]),
 						new Medication(), 0.0, "Unique"));
 

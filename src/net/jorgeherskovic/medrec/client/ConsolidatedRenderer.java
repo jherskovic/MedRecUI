@@ -1,5 +1,6 @@
 package net.jorgeherskovic.medrec.client;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +11,9 @@ import net.jorgeherskovic.medrec.shared.Medication;
 import net.jorgeherskovic.medrec.shared.ReconciledMedication;
 
 import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
 public class ConsolidatedRenderer extends TableRenderer {
@@ -24,8 +27,48 @@ public class ConsolidatedRenderer extends TableRenderer {
 	}
 
 	private void makeCellDoubleHeight(int row, int col) {
-		//this.getAttachedTable().getFlexCellFormatter().setRowSpan(row, col, 2);
-		this.getAttachedTable().getCellFormatter().setVerticalAlignment(row, col, HasVerticalAlignment.ALIGN_BOTTOM);
+		CellFormatter cf = this.getAttachedTable().getCellFormatter();
+		// // DraggableFlexTable t=this.getAttachedTable();
+		//
+		// String cell_HTML = t.getHTML(row, col);
+		// // AbsolutePanel new_panel=new AbsolutePanel();
+		// // new_panel.setSize(this.getAttachedTable().getCellFormatter().get,
+		// // height);
+		// HTML HTML_control = new HTML(cell_HTML);
+		// // new_panel.add();
+		// t.setWidget(row, col, HTML_control);
+		// int original_height = HTML_control.getOffsetHeight();
+		// int original_width = HTML_control.getOffsetWidth();
+		//
+		// // TODO: use height to double the cell's height.
+		// t.remove(HTML_control);
+		// String new_height = Integer.toString(original_height * 2);
+		// HTML_control.setHeight(new_height);
+		//
+		// AbsolutePanel new_panel=new AbsolutePanel();
+		// new_panel.setSize(Integer.toString(original_width), new_height);
+		// new_panel.add(HTML_control);
+		//
+		// t.setWidget(row, col, new_panel);
+		// //
+		// this.getAttachedTable().getCellFormatter().setVerticalAlignment(row,
+		// // col, HasVerticalAlignment.ALIGN_BOTTOM);
+		//
+		// this.getAttachedTable().getCellFormatter()
+		// .setHeight(row, col, new_height);
+
+		// t.getFlexCellFormatter().setRowSpan(row, col, 2);
+		cf.removeStyleName(row, col, "NoReconciliation");
+		cf.removeStyleName(row, col, "PartialReconciliation");
+		cf.addStyleName(row, col, "FullReconciliation");
+	}
+
+	private void flattenCell(int row, int col) {
+		CellFormatter cf = this.getAttachedTable().getCellFormatter();
+		// this.getAttachedTable().getCellFormatter().setHeight(row, col, "0");
+		cf.removeStyleName(row, col, "NoReconciliation");
+		cf.removeStyleName(row, col, "PartialReconciliation");
+		cf.addStyleName(row, col, "FullReconciliation");
 	}
 
 	@Override
@@ -98,7 +141,14 @@ public class ConsolidatedRenderer extends TableRenderer {
 			currentRow += 1;
 
 			if (!m2.isEmpty()) {
+				// Pre-build the current row so resizing works properly
+				for (int j = 0; j < col; j++) {
+					t.setHTML(currentRow, j, "&nbsp;");
+				}
+
 				col = 0;
+				ArrayList<Integer> cells_to_squish = new ArrayList<Integer>();
+
 				HTML second_handle = new HTML();
 				second_handle.setHTML(this.dragToken);
 				Consolidation reverse_cons = new ReconciledMedication(
@@ -109,59 +159,70 @@ public class ConsolidatedRenderer extends TableRenderer {
 
 				t.setText(currentRow, col++, Integer.toString(i + 1));
 				if (m2.getProvenance().equals(m1.getProvenance())) {
-					t.addCell(currentRow);
-					makeCellDoubleHeight(currentRow - 1, col++);
-				} else {
-					t.setHTML(currentRow, col++, m2.getProvenance());
+					// t.addCell(currentRow);
+					// flattenCell(currentRow, col);
+					// makeCellDoubleHeight(t, currentRow - 1, col++);
+					cells_to_squish.add(col);
 				}
 
+				t.setHTML(currentRow, col++, m2.getProvenance());
+
 				if (m2.getMedicationName().equals(m1.getMedicationName())) {
-					t.addCell(currentRow);
-					makeCellDoubleHeight(currentRow - 1, col++);
-				} else {
-					t.setHTML(currentRow, col++, m2.getMedicationName());
+					// t.addCell(currentRow);
+					// flattenCell(currentRow, col);
+					// makeCellDoubleHeight(t, currentRow - 1, col++);
+					cells_to_squish.add(col);
 				}
+				t.setHTML(currentRow, col++, m2.getMedicationName());
 
 				String dosage2 = m2.getDose() + " " + m2.getUnits();
 				if (dosage2.equals(dosage1)) {
-					t.addCell(currentRow);
-					makeCellDoubleHeight(currentRow - 1, col++);
-				} else {
-					t.setHTML(currentRow, col++, dosage2);
+					// t.addCell(currentRow);
+					// flattenCell(currentRow, col);
+					// makeCellDoubleHeight(t, currentRow - 1, col++);
+					cells_to_squish.add(col);
 				}
+				t.setHTML(currentRow, col++, dosage2);
 
 				if (m2.getInstructions().equals(m1.getInstructions())) {
-					t.addCell(currentRow);
-					makeCellDoubleHeight(currentRow - 1, col++);
-				} else {
-					t.setHTML(currentRow, col++, m2.getInstructions());
+					// t.addCell(currentRow);
+					// flattenCell(currentRow, col);
+					// makeCellDoubleHeight(t, currentRow - 1, col++);
+					cells_to_squish.add(col);
 				}
+				t.setHTML(currentRow, col++, m2.getInstructions());
 
 				if (m2.getStartDateString().equals(m1.getStartDateString())) {
-					t.addCell(currentRow);
-					makeCellDoubleHeight(currentRow - 1, col++);
-				} else {
-					t.setHTML(currentRow, col++, m2.getStartDateString());
+					// t.addCell(currentRow);
+					// flattenCell(currentRow, col);
+					// makeCellDoubleHeight(t, currentRow - 1, col++);
+					cells_to_squish.add(col);
 				}
+				t.setHTML(currentRow, col++, m2.getStartDateString());
 
 				if (m2.getEndDateString().equals(m1.getEndDateString())) {
-					t.addCell(currentRow);
-					makeCellDoubleHeight(currentRow - 1, col++);
-				} else {
-					t.setHTML(currentRow, col++, m2.getEndDateString());
+					// t.addCell(currentRow);
+					// flattenCell(currentRow, col);
+					// makeCellDoubleHeight(t, currentRow - 1, col++);
+					cells_to_squish.add(col);
 				}
+				t.setHTML(currentRow, col++, m2.getEndDateString());
 
 				if (m2.getFormulation().equals(m1.getFormulation())) {
-					t.addCell(currentRow);
-					makeCellDoubleHeight(currentRow - 1, col++);
-				} else {
-					t.setHTML(currentRow, col++, m2.getFormulation());
+					// t.addCell(currentRow);
+					// flattenCell(currentRow, col);
+					// makeCellDoubleHeight(t, currentRow - 1, col++);
+					cells_to_squish.add(col);
 				}
+				t.setHTML(currentRow, col++, m2.getFormulation());
 
-				// t.setText(currentRow, col++, this_cons.getExplanation());
-				t.addCell(currentRow);
-				makeCellDoubleHeight(currentRow - 1, col++); // Make explanation
-																// double height
+				cells_to_squish.add(col);
+				t.setText(currentRow, col++, this_cons.getExplanation());
+				// t.addCell(currentRow);
+				// flattenCell(currentRow, col);
+				// makeCellDoubleHeight(t, currentRow - 1, col++); // Make
+				// explanation
+				// double height
 
 				t.getRowFormatter().addStyleName(currentRow,
 						"MultiRowBottomDesign");
@@ -176,6 +237,12 @@ public class ConsolidatedRenderer extends TableRenderer {
 				this.applyStyleToAllCellsInRow(currentRow,
 						"MultiRowBottomDesign");
 				this.applyStyleArrayToRow(currentRow, columnStyles);
+
+				for (int j = 0; j < cells_to_squish.size(); j++) {
+					flattenCell(currentRow, cells_to_squish.get(j));
+					makeCellDoubleHeight(currentRow - 1, cells_to_squish.get(j));
+				}
+
 				currentRow += 1;
 
 			}
