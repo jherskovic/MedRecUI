@@ -1,6 +1,7 @@
 package net.jorgeherskovic.medrec.client;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,14 +12,12 @@ import net.jorgeherskovic.medrec.shared.Medication;
 import net.jorgeherskovic.medrec.shared.ReconciledMedication;
 
 import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
-import org.adamtacy.client.ui.effects.*;
 import org.adamtacy.client.ui.effects.impl.Fade;
+import org.adamtacy.client.ui.effects.events.*;
 
 public class ConsolidatedRenderer extends TableRenderer {
 	private static String[] columnStyles = { "DragHandle", "Origin",
@@ -32,39 +31,9 @@ public class ConsolidatedRenderer extends TableRenderer {
 
 	private void makeCellDoubleHeight(int row, int col) {
 		FlexCellFormatter cf = this.getAttachedTable().getFlexCellFormatter();
-		// // DraggableFlexTable t=this.getAttachedTable();
-		//
-		// String cell_HTML = t.getHTML(row, col);
-		// // AbsolutePanel new_panel=new AbsolutePanel();
-		// // new_panel.setSize(this.getAttachedTable().getCellFormatter().get,
-		// // height);
-		// HTML HTML_control = new HTML(cell_HTML);
-		// // new_panel.add();
-		// t.setWidget(row, col, HTML_control);
-		// int original_height = HTML_control.getOffsetHeight();
-		// int original_width = HTML_control.getOffsetWidth();
-		//
-		// // TODO: use height to double the cell's height.
-		// t.remove(HTML_control);
-		// String new_height = Integer.toString(original_height * 2);
-		// HTML_control.setHeight(new_height);
-		//
-		// AbsolutePanel new_panel=new AbsolutePanel();
-		// new_panel.setSize(Integer.toString(original_width), new_height);
-		// new_panel.add(HTML_control);
-		//
-		// t.setWidget(row, col, new_panel);
-		// //
-		// this.getAttachedTable().getCellFormatter().setVerticalAlignment(row,
-		// // col, HasVerticalAlignment.ALIGN_BOTTOM);
-		//
-		// this.getAttachedTable().getCellFormatter()
-		// .setHeight(row, col, new_height);
+
 		this.getAttachedTable().removeCell(row + 1, col);
 		cf.setRowSpan(row, col, 2);
-		// cf.removeStyleName(row, col, "NoReconciliation");
-		// cf.removeStyleName(row, col, "PartialReconciliation");
-		// cf.addStyleName(row, col, "FullReconciliation");
 	}
 
 	private void flattenCell(int row, int col) {
@@ -84,21 +53,27 @@ public class ConsolidatedRenderer extends TableRenderer {
 		Map<HTML, Consolidation> rowMapping = t.getRowMapping();
 		rowMapping.clear();
 
+		/* In this case, the "rows to remove" array contains the consolidations to remove. Awful semantics, I know, and they require fixing later. */
+		// TODO: Fix row removal semantics
+		
 		this.renderTableHeadings("TableHeading");
 		int currentRow = 1;
 
+		LinkedList<Fade> my_fades=new LinkedList<Fade>();
+		
 		for (int i = 0; i < cons.size(); i++) {
 			ReconciledMedication this_cons = new ReconciledMedication(
 					cons.get(i), 0);
 			Medication m1 = this_cons.getMed1();
 			Medication m2 = this_cons.getMed2();
+			
 			int col = 0;
 
 			/* Create an HTML widget and make it draggable */
 
 			HTML handle = new HTML();
 			handle.setHTML(this.dragToken);
-
+			
 			t.setWidget(currentRow, col++, handle);
 			t.getRowDragController().makeDraggable(handle);
 
@@ -144,6 +119,10 @@ public class ConsolidatedRenderer extends TableRenderer {
 			this.applyStyleToAllCellsInRow(currentRow, cellFormatStyle);
 			this.applyStyleArrayToRow(currentRow, columnStyles);
 
+			if (t.isRowRemovable(i)) {
+				my_fades.add(new Fade(t.getRowFormatter().getElement(currentRow)));
+			}
+			
 			currentRow += 1;
 
 			if (!m2.isEmpty()) {
@@ -257,11 +236,35 @@ public class ConsolidatedRenderer extends TableRenderer {
 					makeCellDoubleHeight(currentRow - 1, cells_to_squish.get(j));
 				}
 
+
+				if (t.isRowRemovable(i)) {
+					my_fades.add(new Fade(t.getRowFormatter().getElement(currentRow)));
+				}
+	
 				currentRow += 1;
 
 			}
 		}
 
+		// Empty row removal list
+		int rr=t.getRowToRemove();
+		while (rr > -1) {
+			t.deleteMed(rr);
+			rr=t.getRowToRemove();
+		}
+		
+		// play fades
+		while (!my_fades.isEmpty()) {
+			Fade this_fade=my_fades.remove();
+			this_fade.addEffectCompletedHandler(new EffectCompletedHandler() {
+				public void onEffectCompleted(EffectCompletedEvent evt) {
+					ConsolidatedRenderer.this.bus.fireEvent(new RedrawEvent());
+				}
+			});
+			this_fade.setDuration(TableRenderer.FADE_DURATION);
+			this_fade.play();
+		}
+		
 		return;
 
 	}
@@ -294,7 +297,8 @@ public class ConsolidatedRenderer extends TableRenderer {
 		}
 
 		this.getAttachedTable().insertMed(realTargetPosition, cons);
-		event.getSourceTable().deleteMed(event.getSourceRow() - 1);
+		//event.getSourceTable().deleteMed(event.getSourceRow() - 1);
+		event.getSourceTable().registerRemovalRequest(event.getSourceRow()-1);
 		//ArrayList<Fade> fades=new ArrayList<Fade>();
 		//Fade new_fade=new Fade(event.getSourceTable().getRowFormatter().getElement(0));
 		//new_fade.play();

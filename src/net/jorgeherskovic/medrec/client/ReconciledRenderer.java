@@ -3,6 +3,8 @@ package net.jorgeherskovic.medrec.client;
 import java.util.List;
 import java.util.Map;
 
+import org.adamtacy.client.ui.effects.events.EffectCompletedEvent;
+import org.adamtacy.client.ui.effects.events.EffectCompletedHandler;
 import org.adamtacy.client.ui.effects.impl.Fade;
 
 import net.jorgeherskovic.medrec.client.event.RedrawEvent;
@@ -65,6 +67,21 @@ public class ReconciledRenderer extends TableRenderer {
 			this.applyStyleToAllCellsInRow(i + 1, "SingleRowDesign");
 			this.applyStyleArrayToRow(i + 1, columnStyles);
 		}
+		
+		int rr=t.getRowToRemove();
+		while (rr > -1) {
+			t.deleteMed(rr);
+			Fade my_fade=new Fade(t.getRowFormatter().getElement(rr+1));
+			my_fade.addEffectCompletedHandler(new EffectCompletedHandler() {
+				public void onEffectCompleted(EffectCompletedEvent evt) {
+					ReconciledRenderer.this.bus.fireEvent(new RedrawEvent());
+				}
+			});
+			my_fade.setDuration(TableRenderer.FADE_DURATION);
+			my_fade.play();
+			 
+			rr=t.getRowToRemove();
+		}
 
 		return;
 
@@ -89,12 +106,14 @@ public class ReconciledRenderer extends TableRenderer {
 		// We will go in reverse order as not to restart the search.
 		List<? extends Consolidation> otherList = event.getSourceTable()
 				.getMedList();
+		
 		for (int i = otherList.size() - 1; i >= 0; i--) {
 			if (otherList.get(i).same_meds(cons)) {
-				Fade new_fade=new Fade(event.getSourceTable().getRowFormatter().getElement(event.getSourceRow()));
-				new_fade.play();
+				//Fade new_fade=new Fade(event.getSourceTable().getRowFormatter().getElement(event.getSourceRow()));
+				//new_fade.play();
 				
-				otherList.remove(i);
+				//otherList.remove(i);
+				event.getSourceTable().registerRemovalRequest(i);
 			}
 		}
 		bus.fireEvent(new RedrawEvent());

@@ -1,6 +1,7 @@
 package net.jorgeherskovic.medrec.client;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ final public class DraggableFlexTable extends FlexTable {
 	private FlexTableRowDragController RowDragController;
 	private List<? extends Consolidation> medList;
 	private Map<HTML, Consolidation> rowMapping;
+	private LinkedList<Integer> rows_to_remove;
 
 	/**
 	 * @return the rowMapping
@@ -26,8 +28,24 @@ final public class DraggableFlexTable extends FlexTable {
 		this.setRowDragController(dragController);
 		this.medList = medList;
 		this.rowMapping = new HashMap<HTML, Consolidation>();
+		this.rows_to_remove=new LinkedList<Integer>();
 	}
 
+	public void registerRemovalRequest(int rownum) {
+		this.rows_to_remove.add(rownum);
+	}
+	
+	public int getRowToRemove() {
+		if (this.rows_to_remove.isEmpty()) {
+			return -1;
+		}
+		return this.rows_to_remove.remove();
+	}
+	
+	public boolean isRowRemovable(int rownum) {
+		return this.rows_to_remove.contains(new Integer(rownum));
+	}
+	
 	public FlexTableRowDragController getRowDragController() {
 		return RowDragController;
 	}

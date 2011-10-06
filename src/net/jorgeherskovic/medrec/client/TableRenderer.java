@@ -15,12 +15,13 @@ public abstract class TableRenderer {
 	private String[] headings;
 	protected final SimpleEventBus bus;
 	protected final String dragToken = "&nbsp;[DRAG]&nbsp;";
+	public static final double FADE_DURATION=0.5; 
 
 	public TableRenderer(DraggableFlexTable table, String[] headings,
 			SimpleEventBus bus) {
 		this.attachedTable = table;
 		this.headings = headings;
-
+		
 		bus.addHandler(RowDroppedEvent.TYPE, new RowDroppedEventHandler() {
 
 			public void onRowDropped(RowDroppedEvent event) {
