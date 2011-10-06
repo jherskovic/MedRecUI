@@ -31,6 +31,10 @@ final public class DraggableFlexTable extends FlexTable {
 		this.rows_to_remove=new LinkedList<Integer>();
 	}
 
+	public void associateMedList(List<? extends Consolidation> medList) {
+		this.medList=medList;
+	}
+	
 	public void registerRemovalRequest(int rownum) {
 		this.rows_to_remove.add(rownum);
 	}

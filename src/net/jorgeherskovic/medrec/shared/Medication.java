@@ -36,7 +36,7 @@ public class Medication {
 	 *            the provenance to set
 	 */
 	public void setProvenance(String provenance) {
-		this.provenance = provenance;
+		this.provenance = toProperCase(provenance);
 	}
 
 	/**
@@ -51,7 +51,7 @@ public class Medication {
 	 *            the medicationName to set
 	 */
 	public void setMedicationName(String medicationName) {
-		this.medicationName = medicationName;
+		this.medicationName = toProperCase(medicationName);
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class Medication {
 	 *            the dose to set
 	 */
 	public void setDose(String dose) {
-		this.dose = dose;
+		this.dose = toProperCase(dose);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class Medication {
 	 *            the formulation to set
 	 */
 	public void setFormulation(String formulation) {
-		this.formulation = formulation;
+		this.formulation = toProperCase(formulation);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class Medication {
 	 *            the instructions to set
 	 */
 	public void setInstructions(String instructions) {
-		this.instructions = instructions;
+		this.instructions = toProperCase(instructions);
 	}
 
 	/**
@@ -159,17 +159,28 @@ public class Medication {
 
 		return myOutputFormat.format(endDate);
 	}
+	
+	private static String toProperCase(String name) {
+		  if (name == null || name.trim().length() == 0) {
+		    return name;
+		  }
 
+		  String new_name = name.trim().toLowerCase();
+		  char[] charArray = new_name.toCharArray();
+		  charArray[0] = Character.toUpperCase(charArray[0]);
+		  return new String(charArray);
+		}
+	
 	public Medication(String medicationName, String dose, String units,
 			String formulation, String instructions, String provenance,
 			Date startDate, Date endDate) {
 		super();
-		this.medicationName = medicationName;
-		this.dose = dose;
-		this.units = units;
-		this.formulation = formulation;
-		this.instructions = instructions;
-		this.provenance = provenance;
+		this.medicationName = toProperCase(medicationName);
+		this.dose = toProperCase(dose);
+		this.units = toProperCase(units);
+		this.formulation = toProperCase(formulation);
+		this.instructions = toProperCase(instructions);
+		this.provenance = toProperCase(provenance);
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}

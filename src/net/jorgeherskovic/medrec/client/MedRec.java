@@ -30,25 +30,9 @@ public class MedRec implements EntryPoint {
 	 */
 	private static final String JSON_URL = "sample.json";
 	private Reconciliation myData;
-	private final SimpleEventBus bus=new SimpleEventBus();
-	
+	private final SimpleEventBus bus = new SimpleEventBus();
+
 	public void onModuleLoad() {
-		this.bus.addHandler(FinishedLoadingEvent.TYPE,
-				new FinishedLoadingEventHandler() {
-
-					public void onFinishedLoading(FinishedLoadingEvent event) {
-						MedRec.this.buildInterface();
-					}
-
-				});
-
-		/* Read data */
-		//this.myData = new MedRecJSONData(JSON_URL, bus);
-		this.myData=new SampleData();
-		this.bus.fireEvent(new FinishedLoadingEvent());
-	}
-	
-	public void buildInterface()  {
 		// TODO Auto-generated method stub
 		final RootPanel rootPanel = RootPanel.get("insert_app_here");
 		rootPanel.setSize("800px", "600px");
@@ -60,7 +44,6 @@ public class MedRec implements EntryPoint {
 				"Medication", "Dosage", "Freq.", "Start", "End", "Form",
 				"Alerts" };
 
-		RootPanel.get("LoadingLabel").setVisible(false);
 		AbsolutePanel absolutePanel = new AbsolutePanel();
 		rootPanel.add(absolutePanel);
 		absolutePanel.setSize("800px", "600px");
@@ -109,20 +92,18 @@ public class MedRec implements EntryPoint {
 		rest.setTopWidget(rest_of_rest);
 
 		DockPanel dockPanel = new DockPanel();
-		dockPanel
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		dockPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		consolidatedPanel.add(dockPanel, 0, 0);
 		dockPanel.setSize("800px", "252px");
 
-		Label lblConsolidatedRecord = new Label(
-				"Consolidated Record");
+		Label lblConsolidatedRecord = new Label("Consolidated Record");
 		lblConsolidatedRecord.setStyleName("big-label");
 		lblConsolidatedRecord
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 		dockPanel.add(lblConsolidatedRecord, DockPanel.NORTH);
 
-		DraggableFlexTable consolidatedTable = new DraggableFlexTable(
-				row_dc, myData.getConsolidatedMeds());
+		final DraggableFlexTable consolidatedTable = new DraggableFlexTable(
+				row_dc, null);
 		consolidatedTable.setStyleName("TableDesign");
 		dockPanel.add(consolidatedTable, DockPanel.CENTER);
 		FlexTableRowDropController ct_dc = new FlexTableRowDropController(
@@ -145,28 +126,26 @@ public class MedRec implements EntryPoint {
 		rest_of_rest.add(reconciledPanel);
 
 		DockPanel dockPanel_1 = new DockPanel();
-		dockPanel_1
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		dockPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		reconciledPanel.add(dockPanel_1, 0, 0);
 		dockPanel_1.setSize("800px", "252px");
 
-		Label lblReconciledRecord = new Label(
-				"Reconciled Record");
+		Label lblReconciledRecord = new Label("Reconciled Record");
 		lblReconciledRecord.setStyleName("big-label");
 		lblReconciledRecord
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 		dockPanel_1.add(lblReconciledRecord, DockPanel.NORTH);
 
-		DraggableFlexTable reconciledTable = new DraggableFlexTable(
-				row_dc, myData.getReconciledMeds());
+		final DraggableFlexTable reconciledTable = new DraggableFlexTable(
+				row_dc, null);
 		reconciledTable.setStyleName("TableDesign");
 		dockPanel_1.add(reconciledTable, DockPanel.CENTER);
 		FlexTableRowDropController rc_dc = new FlexTableRowDropController(
-				reconciledTable, this.bus);
+				reconciledTable, bus);
 
 		@SuppressWarnings("unused")
 		ReconciledRenderer recRenderer = new ReconciledRenderer(
-				reconciledTable, reconciledHeadings, this.bus);
+				reconciledTable, reconciledHeadings, bus);
 
 		/* Instantiate drop controllers */
 
@@ -174,7 +153,26 @@ public class MedRec implements EntryPoint {
 		row_dc.registerDropController(ct_dc);
 		row_dc.registerDropController(rc_dc);
 
-		this.bus.fireEvent(new RedrawEvent());
+		bus.addHandler(FinishedLoadingEvent.TYPE,
+				new FinishedLoadingEventHandler() {
 
+					public void onFinishedLoading(FinishedLoadingEvent event) {
+						reconciledTable.associateMedList(myData
+								.getReconciledMeds());
+						consolidatedTable.associateMedList(myData
+								.getConsolidatedMeds());
+
+						RootPanel.get("LoadingLabel").setVisible(false);
+
+						bus.fireEvent(new RedrawEvent());
+					}
+
+				});
+
+		/* Read data */
+		this.myData = new MedRecJSONData(JSON_URL, bus);
+		//this.myData = new SampleData();
+		//this.bus.fireEvent(new FinishedLoadingEvent());
 	}
+
 }
