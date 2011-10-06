@@ -5,6 +5,7 @@ import net.jorgeherskovic.medrec.client.event.RedrawEventHandler;
 import net.jorgeherskovic.medrec.client.event.RowDroppedEvent;
 import net.jorgeherskovic.medrec.client.event.RowDroppedEventHandler;
 
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.HTMLTable;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
@@ -16,13 +17,16 @@ public abstract class TableRenderer {
 	protected final SimpleEventBus bus;
 	protected final String dragToken = "&nbsp;[DRAG]&nbsp;";
 	public static final double FADE_DURATION=0.5; 
-
+	private HandlerRegistration rowDroppedReg;
+	private HandlerRegistration redrawReg;
+	
 	public TableRenderer(DraggableFlexTable table, String[] headings,
 			SimpleEventBus bus) {
 		this.attachedTable = table;
 		this.headings = headings;
+		this.bus = bus;
 		
-		bus.addHandler(RowDroppedEvent.TYPE, new RowDroppedEventHandler() {
+		this.rowDroppedReg=bus.addHandler(RowDroppedEvent.TYPE, new RowDroppedEventHandler() {
 
 			public void onRowDropped(RowDroppedEvent event) {
 				// Only react to messages targeted at THIS table
@@ -33,7 +37,7 @@ public abstract class TableRenderer {
 			}
 		});
 
-		bus.addHandler(RedrawEvent.TYPE, new RedrawEventHandler() {
+		this.redrawReg=bus.addHandler(RedrawEvent.TYPE, new RedrawEventHandler() {
 
 			public void onRedraw(RedrawEvent event) {
 				// TODO Auto-generated method stub
@@ -41,8 +45,6 @@ public abstract class TableRenderer {
 			}
 
 		});
-
-		this.bus = bus;
 	}
 
 	public abstract void handleDroppedRow(RowDroppedEvent event);

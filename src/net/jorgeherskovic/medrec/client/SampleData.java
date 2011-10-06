@@ -1,12 +1,11 @@
 package net.jorgeherskovic.medrec.client;
 
-import java.util.ArrayList;
-
 import net.jorgeherskovic.medrec.shared.Consolidation;
 import net.jorgeherskovic.medrec.shared.Medication;
 import net.jorgeherskovic.medrec.shared.ReconciledMedication;
+import net.jorgeherskovic.medrec.shared.Reconciliation;
 
-public class SampleData {
+public class SampleData extends Reconciliation {
 	private String[] medlist1 = { "Zoloft|50|mg|oral|qd|EHR|2006.05.22|",
 			"Vicodin|5/500|mg|oral|qd|EHR|2006.05.22|",
 			"Levaquin|10|mg|oral|qd|EHR|2009.02.25|2009.03.10" };
@@ -19,19 +18,14 @@ public class SampleData {
 			"Lipitor|10|mg|oral|qd|Both|2000.12.15|",
 			"Sotalol|80|mg|oral|qd|Both|2000.12.15|2011.12.24" };
 
-	public ArrayList<ReconciledMedication> reconciledMeds;
-
-	public ArrayList<Consolidation> consolidatedMeds;
-
 	public SampleData() {
-		this.reconciledMeds = new ArrayList<ReconciledMedication>(5);
+		super();
 		@SuppressWarnings("unused")
 		boolean b = this.reconciledMeds.add(new ReconciledMedication(new Medication(reconciled[0])));
 		b=this.reconciledMeds.add(new ReconciledMedication(new Consolidation(new Medication(reconciled[1]), new Medication(reconciled[1]), 1.0, "Identical"), 0));
 		b=this.reconciledMeds.add(new ReconciledMedication(new Medication(reconciled[2])));
 		b=this.reconciledMeds.add(new ReconciledMedication(new Medication(reconciled[3])));
 		
-		this.consolidatedMeds = new ArrayList<Consolidation>(5);
 		b=this.consolidatedMeds.add(new Consolidation(new Medication(medlist1[0]), new Medication(
 				medlist2[0]), 0.6, "Brand/Generic"));
 		b=this.consolidatedMeds.add(new Consolidation(new Medication(medlist1[1]), new Medication(

@@ -176,7 +176,6 @@ public class Medication {
 
 	public Medication() {
 		super();
-		// TODO Auto-generated constructor stub
 		this.medicationName = "";
 		this.dose = "";
 		this.units = "";
