@@ -3,6 +3,8 @@ package net.jorgeherskovic.medrec.client;
 import java.util.List;
 import java.util.Map;
 
+import org.adamtacy.client.ui.effects.impl.Fade;
+
 import net.jorgeherskovic.medrec.client.event.RedrawEvent;
 import net.jorgeherskovic.medrec.client.event.RowDroppedEvent;
 import net.jorgeherskovic.medrec.shared.Consolidation;
@@ -14,7 +16,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 public class ReconciledRenderer extends TableRenderer {
 
-	private static String[] columnStyles = { "DragHandle", "EntryNumber",
+	private static String[] columnStyles = { "DragHandle", 
 			"Origin", "Medication", "Dosage", "Frequency", "Date", "Date",
 			"Form", "Alert" };
 
@@ -44,7 +46,7 @@ public class ReconciledRenderer extends TableRenderer {
 
 			rowMapping.put(handle, meds.get(i));
 
-			t.setText(i + 1, col++, Integer.toString(i + 1));
+			// t.setText(i + 1, col++, Integer.toString(i + 1)); // No entry number
 			t.setHTML(i + 1, col++, m.getProvenance());
 			t.setHTML(i + 1, col++, m.getMedicationName());
 			t.setHTML(i + 1, col++, m.getDose() + " " + m.getUnits());
@@ -89,6 +91,9 @@ public class ReconciledRenderer extends TableRenderer {
 				.getMedList();
 		for (int i = otherList.size() - 1; i >= 0; i--) {
 			if (otherList.get(i).same_meds(cons)) {
+				Fade new_fade=new Fade(event.getSourceTable().getRowFormatter().getElement(event.getSourceRow()));
+				new_fade.play();
+				
 				otherList.remove(i);
 			}
 		}

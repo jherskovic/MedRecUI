@@ -12,14 +12,18 @@ import net.jorgeherskovic.medrec.shared.ReconciledMedication;
 
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
+import org.adamtacy.client.ui.effects.*;
+import org.adamtacy.client.ui.effects.impl.Fade;
+
 public class ConsolidatedRenderer extends TableRenderer {
-	private static String[] columnStyles = { "DragHandle", "EntryNumber",
-			"Origin", "Medication", "Dosage", "Frequency", "Date", "Date",
-			"Form", "Relation" };
+	private static String[] columnStyles = { "DragHandle", "Origin",
+			"Medication", "Dosage", "Frequency", "Date", "Date", "Form",
+			"Relation" };
 
 	public ConsolidatedRenderer(DraggableFlexTable table, String[] headings,
 			SimpleEventBus bus) {
@@ -27,7 +31,7 @@ public class ConsolidatedRenderer extends TableRenderer {
 	}
 
 	private void makeCellDoubleHeight(int row, int col) {
-		CellFormatter cf = this.getAttachedTable().getCellFormatter();
+		FlexCellFormatter cf = this.getAttachedTable().getFlexCellFormatter();
 		// // DraggableFlexTable t=this.getAttachedTable();
 		//
 		// String cell_HTML = t.getHTML(row, col);
@@ -56,11 +60,11 @@ public class ConsolidatedRenderer extends TableRenderer {
 		//
 		// this.getAttachedTable().getCellFormatter()
 		// .setHeight(row, col, new_height);
-
-		// t.getFlexCellFormatter().setRowSpan(row, col, 2);
-		cf.removeStyleName(row, col, "NoReconciliation");
-		cf.removeStyleName(row, col, "PartialReconciliation");
-		cf.addStyleName(row, col, "FullReconciliation");
+		this.getAttachedTable().removeCell(row + 1, col);
+		cf.setRowSpan(row, col, 2);
+		// cf.removeStyleName(row, col, "NoReconciliation");
+		// cf.removeStyleName(row, col, "PartialReconciliation");
+		// cf.addStyleName(row, col, "FullReconciliation");
 	}
 
 	private void flattenCell(int row, int col) {
@@ -100,7 +104,9 @@ public class ConsolidatedRenderer extends TableRenderer {
 
 			rowMapping.put(handle, this_cons);
 
-			t.setText(currentRow, col++, Integer.toString(i + 1));
+			// t.setText(currentRow, col++, Integer.toString(i + 1)); //No entry
+			// number
+
 			t.setHTML(currentRow, col++, m1.getProvenance());
 
 			t.setHTML(currentRow, col++, m1.getMedicationName());
@@ -157,69 +163,77 @@ public class ConsolidatedRenderer extends TableRenderer {
 				t.setWidget(currentRow, col++, second_handle);
 				t.getRowDragController().makeDraggable(second_handle);
 
-				t.setText(currentRow, col++, Integer.toString(i + 1));
+				// t.setText(currentRow, col++, Integer.toString(i + 1)); // No
+				// entry number
+
 				if (m2.getProvenance().equals(m1.getProvenance())) {
 					// t.addCell(currentRow);
 					// flattenCell(currentRow, col);
 					// makeCellDoubleHeight(t, currentRow - 1, col++);
-					cells_to_squish.add(col);
+					cells_to_squish.add(col++);
+				} else {
+					t.setHTML(currentRow, col++, m2.getProvenance());
 				}
-
-				t.setHTML(currentRow, col++, m2.getProvenance());
 
 				if (m2.getMedicationName().equals(m1.getMedicationName())) {
 					// t.addCell(currentRow);
 					// flattenCell(currentRow, col);
 					// makeCellDoubleHeight(t, currentRow - 1, col++);
-					cells_to_squish.add(col);
+					cells_to_squish.add(col++);
+				} else {
+					t.setHTML(currentRow, col++, m2.getMedicationName());
 				}
-				t.setHTML(currentRow, col++, m2.getMedicationName());
 
 				String dosage2 = m2.getDose() + " " + m2.getUnits();
 				if (dosage2.equals(dosage1)) {
 					// t.addCell(currentRow);
 					// flattenCell(currentRow, col);
 					// makeCellDoubleHeight(t, currentRow - 1, col++);
-					cells_to_squish.add(col);
+					cells_to_squish.add(col++);
+				} else {
+					t.setHTML(currentRow, col++, dosage2);
 				}
-				t.setHTML(currentRow, col++, dosage2);
 
 				if (m2.getInstructions().equals(m1.getInstructions())) {
 					// t.addCell(currentRow);
 					// flattenCell(currentRow, col);
 					// makeCellDoubleHeight(t, currentRow - 1, col++);
-					cells_to_squish.add(col);
+					cells_to_squish.add(col++);
+				} else {
+					t.setHTML(currentRow, col++, m2.getInstructions());
 				}
-				t.setHTML(currentRow, col++, m2.getInstructions());
 
 				if (m2.getStartDateString().equals(m1.getStartDateString())) {
 					// t.addCell(currentRow);
 					// flattenCell(currentRow, col);
 					// makeCellDoubleHeight(t, currentRow - 1, col++);
-					cells_to_squish.add(col);
+					cells_to_squish.add(col++);
+				} else {
+					t.setHTML(currentRow, col++, m2.getStartDateString());
 				}
-				t.setHTML(currentRow, col++, m2.getStartDateString());
 
 				if (m2.getEndDateString().equals(m1.getEndDateString())) {
 					// t.addCell(currentRow);
 					// flattenCell(currentRow, col);
 					// makeCellDoubleHeight(t, currentRow - 1, col++);
-					cells_to_squish.add(col);
+					cells_to_squish.add(col++);
+				} else {
+					t.setHTML(currentRow, col++, m2.getEndDateString());
 				}
-				t.setHTML(currentRow, col++, m2.getEndDateString());
 
 				if (m2.getFormulation().equals(m1.getFormulation())) {
 					// t.addCell(currentRow);
 					// flattenCell(currentRow, col);
 					// makeCellDoubleHeight(t, currentRow - 1, col++);
-					cells_to_squish.add(col);
+					cells_to_squish.add(col++);
+				} else {
+					t.setHTML(currentRow, col++, m2.getFormulation());
 				}
-				t.setHTML(currentRow, col++, m2.getFormulation());
 
-				cells_to_squish.add(col);
-				t.setText(currentRow, col++, this_cons.getExplanation());
+				// cells_to_squish.add(col);
+				// t.setText(currentRow, col++, this_cons.getExplanation());
 				// t.addCell(currentRow);
-				// flattenCell(currentRow, col);
+				cells_to_squish.add(col++);
 				// makeCellDoubleHeight(t, currentRow - 1, col++); // Make
 				// explanation
 				// double height
@@ -238,7 +252,7 @@ public class ConsolidatedRenderer extends TableRenderer {
 						"MultiRowBottomDesign");
 				this.applyStyleArrayToRow(currentRow, columnStyles);
 
-				for (int j = 0; j < cells_to_squish.size(); j++) {
+				for (int j = cells_to_squish.size() - 1; j >= 0; j--) {
 					flattenCell(currentRow, cells_to_squish.get(j));
 					makeCellDoubleHeight(currentRow - 1, cells_to_squish.get(j));
 				}
@@ -281,6 +295,11 @@ public class ConsolidatedRenderer extends TableRenderer {
 
 		this.getAttachedTable().insertMed(realTargetPosition, cons);
 		event.getSourceTable().deleteMed(event.getSourceRow() - 1);
+		//ArrayList<Fade> fades=new ArrayList<Fade>();
+		//Fade new_fade=new Fade(event.getSourceTable().getRowFormatter().getElement(0));
+		//new_fade.play();
+		
+//		Fade fade_it=new Fade(event.getSourceTable().getWidget(row, column))
 		bus.fireEvent(new RedrawEvent());
 	}
 

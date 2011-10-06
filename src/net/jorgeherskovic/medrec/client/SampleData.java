@@ -17,7 +17,7 @@ public class SampleData {
 			"Quinapril|40|mg|oral|bid|Both|2000.12.15|",
 			"Warfarin|5|mg|oral|qd|Both|2008.09.17|",
 			"Lipitor|10|mg|oral|qd|Both|2000.12.15|",
-			"Sotalol|80|mg|oral|qd|Both|2000.12.15|" };
+			"Sotalol|80|mg|oral|qd|Both|2000.12.15|2011.12.24" };
 
 	public ArrayList<ReconciledMedication> reconciledMeds;
 

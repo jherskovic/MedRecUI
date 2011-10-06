@@ -32,12 +32,12 @@ public class MedRec implements EntryPoint {
 
 		/* Read data */
 		SampleData myData = new SampleData();
-		String[] consolidatedHeadings = new String[] { "&nbsp;", "#", "Origin",
-				"Medication", "Dosage", "Freq.", "Start<br>Date",
-				"End<br>Date", "Form", "Relation" };
-		String[] reconciledHeadings = new String[] { "&nbsp;", "#", "Origin",
-				"Medication", "Dosage", "Freq.", "Start<br>Date",
-				"End<br>Date", "Form", "Alerts" };
+		String[] consolidatedHeadings = new String[] { "&nbsp;", "Origin",
+				"Medication", "Dosage", "Freq.", "Start",
+				"End", "Form", "Relation" };
+		String[] reconciledHeadings = new String[] { "&nbsp;", "Origin",
+				"Medication", "Dosage", "Freq.", "Start",
+				"End", "Form", "Alerts" };
 
 		SimpleEventBus bus = new SimpleEventBus();
 
@@ -96,7 +96,7 @@ public class MedRec implements EntryPoint {
 		Label lblConsolidatedRecord = new Label("Consolidated Record");
 		lblConsolidatedRecord.setStyleName("big-label");
 		lblConsolidatedRecord
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 		dockPanel.add(lblConsolidatedRecord, DockPanel.NORTH);
 
 		DraggableFlexTable consolidatedTable = new DraggableFlexTable(row_dc,
@@ -130,7 +130,7 @@ public class MedRec implements EntryPoint {
 		Label lblReconciledRecord = new Label("Reconciled Record");
 		lblReconciledRecord.setStyleName("big-label");
 		lblReconciledRecord
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 		dockPanel_1.add(lblReconciledRecord, DockPanel.NORTH);
 
 		DraggableFlexTable reconciledTable = new DraggableFlexTable(row_dc,

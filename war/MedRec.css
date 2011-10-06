@@ -1,11 +1,13 @@
-/** Add css rules here for your application. */
-/** Example rules used by the template application (remove for your app) */
+@import url("http://fonts.googleapis.com/css?family=Muli");
+
 h1 {
+	background: #F9F9F7 url('images/m1.jpg') repeat-x;
 	font-size: 2em;
 	font-weight: bold;
-	color: black;
+	color: white;
 	margin: 40px 0px 70px;
 	text-align: center;
+	
 }
 
 .sendButton {
@@ -31,8 +33,22 @@ h1 {
 	margin: 15px 6px 6px;
 }
 
+.body{
+}
 .provenance {
 	border: 1px;
+}
+
+.big-label {
+	height: 30px;
+	line-height: 35px;
+	background-size:cover;
+	padding-left: 20px;
+	font-size: 180%;
+	color: #c5bfb5;
+	letter-spacing: 1px;
+	font-family: 'Muli', verdana, sans-serif; 
+	text-align: left;
 }
 
 .TableDesign {
@@ -42,14 +58,12 @@ h1 {
 }
 
 .TableHeading {
-	border: 1px solid Black;
-	font-weight: bold;
-	text-align: center;
+	color: #989288;
+	text-align: left;
 	padding-top: 5px;
 	padding-bottom: 5px;
-	padding-left: 10px;
-	padding-right: 10px;
-	font-size: 110%;
+	font-size: 120%;
+	font-family: 'Muli', verdana, sans-serif;
 }
 
 .EntryNumber {
@@ -58,40 +72,31 @@ h1 {
 }
 
 .SingleRowDesign {
-	border-top: 1px solid Black;
-	border-right: 1px solid black;
-	border-left: 1px solid black;
-	border-bottom: 1px solid Black;
-	border: 1px solid Black;
+	border-bottom: 1px solid gray;
 }
 
 .MultiRowTopDesign {
-	border-top: 1px solid Black;
-	border-right: 1px solid black;
-	border-left: 1px solid black;
+	border-top: 1px solid gray;
 }
 
 .MultiRowMiddleDesign {
-	border-right: 1px solid black;
-	border-left: 1px solid black;
 }
 
 .MultiRowBottomDesign {
-	border-right: 1px solid black;
-	border-bottom: 1px solid black;
-	border-left: 1px solid black;
+	border-bottom: 1px solid gray;
 }
 
 .PartialReconciliation {
-	background-color: #FAFAA2;
+	background-color: #fbe4a0;
 }
 
 .FullReconciliation {
-	background-color: #C3FFB8;
+	background-color: #FFFFFF;
+	
 }
 
 .NoReconciliation {
-	background-color: #FF8A8A;
+	background-color: #f3924c;
 }
 
 .med-table-positioner {
@@ -100,16 +105,9 @@ h1 {
 	margin-top: 2px;
 }
 
-.big-label {
-	font-variant: small-caps;
-	font-size: 120%;
-	font-family: sans-serif;
-	font-weight: bold;
-	text-align: center;
-}
-
 .DragHandle {
-	
+	font-family: 'Muli', verdana, sans-serif;
+	text-align: center;
 }
 
 .EntryNumber {
@@ -117,35 +115,44 @@ h1 {
 }
 
 .Origin {
-	
+	font-family: 'Muli', verdana, sans-serif; 
+	text-align: left;
 }
 
 .Medication {
 	font-size: 110%;
 	font-weight: bold;
+	font-family: 'Muli', verdana, sans-serif; 
+	text-align: left;
 }
 
 
 .Dosage {
-	
+	font-family: 'Muli', verdana, sans-serif; 
+	text-align: left;
 }
 
 .Frequency {
-	
+	font-family: 'Muli', verdana, sans-serif; 
+	text-align: left;
 }
 
 .Date {
-	
+	font-family: 'Muli', verdana, sans-serif; 
+	text-align: left;
 }
 
 .Form {
-	
+	font-family: 'Muli', verdana, sans-serif; 
+	text-align: left;
 }
 
 .Relation {
-	
+	font-family: 'Muli', verdana, sans-serif; 
+	text-align: left;
 }
 
 .Alert {
-	
+	font-family: 'Muli', verdana, sans-serif; 
+	text-align: left;
 }

@@ -19,5 +19,6 @@
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
   <source path='shared'/><inherits name="com.allen_sauer.gwt.dnd.gwt-dnd"></inherits>
+	<inherits name="org.adamtacy.GWTEffects"></inherits>
 
 </module>
