@@ -6,10 +6,15 @@ import net.jorgeherskovic.medrec.client.event.FinishedLoadingEventHandler;
 import net.jorgeherskovic.medrec.shared.Reconciliation;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -35,7 +40,7 @@ public class MedRec implements EntryPoint {
 	public void onModuleLoad() {
 		// TODO Auto-generated method stub
 		final RootPanel rootPanel = RootPanel.get("insert_app_here");
-		rootPanel.setSize("800px", "600px");
+		//rootPanel.setSize("800px", "600px");
 
 		final String[] consolidatedHeadings = new String[] { "&nbsp;",
 				"Origin", "Medication", "Dosage", "Freq.", "Start", "End",
@@ -44,18 +49,20 @@ public class MedRec implements EntryPoint {
 				"Medication", "Dosage", "Freq.", "Start", "End", "Form",
 				"Alerts" };
 
-		AbsolutePanel absolutePanel = new AbsolutePanel();
+		rootPanel.getElement().getStyle().setPosition(Position.RELATIVE); // Fix required for drag & drop
+		
+		final AbsolutePanel absolutePanel = new AbsolutePanel();
+		
 		rootPanel.add(absolutePanel);
-		absolutePanel.setSize("800px", "600px");
-
+		//absolutePanel.setSize("800px", "600px");
 		FlexTableRowDragController row_dc = new FlexTableRowDragController(
 				absolutePanel);
 
-		VerticalSplitPanel vsPanel = new VerticalSplitPanel();
+		final VerticalSplitPanel vsPanel = new VerticalSplitPanel();
 		absolutePanel.add(vsPanel);
 		vsPanel.setSize("800px", "600px");
 
-		AbsolutePanel absolutePanel_1 = new AbsolutePanel();
+		final AbsolutePanel absolutePanel_1 = new AbsolutePanel();
 		absolutePanel_1.setStyleName("provenance");
 		// absolutePanel.add(absolutePanel_1, 0, 0);
 		absolutePanel_1.setSize("800px", "52px");
@@ -78,20 +85,20 @@ public class MedRec implements EntryPoint {
 		vsPanel.setTopWidget(absolutePanel_1);
 		vsPanel.setSplitPosition("52px");
 
-		VerticalSplitPanel rest = new VerticalSplitPanel();
+		final VerticalSplitPanel rest = new VerticalSplitPanel();
 		rest.setSize("800px", "548px");
 		vsPanel.setBottomWidget(rest);
 		rest.setSplitPosition("505px");
 
-		VerticalSplitPanel rest_of_rest = new VerticalSplitPanel();
+		final VerticalSplitPanel rest_of_rest = new VerticalSplitPanel();
 		rest_of_rest.setSize("800px", "504px");
-		AbsolutePanel consolidatedPanel = new AbsolutePanel();
+		final AbsolutePanel consolidatedPanel = new AbsolutePanel();
 		// absolutePanel.add(consolidatedPanel, 0, 58);
 		consolidatedPanel.setSize("800px", "252px");
 		rest_of_rest.setTopWidget(consolidatedPanel);
 		rest.setTopWidget(rest_of_rest);
 
-		DockPanel dockPanel = new DockPanel();
+		final DockPanel dockPanel = new DockPanel();
 		dockPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		consolidatedPanel.add(dockPanel, 0, 0);
 		dockPanel.setSize("800px", "252px");
@@ -112,7 +119,7 @@ public class MedRec implements EntryPoint {
 		ConsolidatedRenderer conRenderer = new ConsolidatedRenderer(
 				consolidatedTable, consolidatedHeadings, bus);
 
-		AbsolutePanel bottomPanel = new AbsolutePanel();
+		final AbsolutePanel bottomPanel = new AbsolutePanel();
 		bottomPanel.setSize("800px", "30px");
 		rest.setBottomWidget(bottomPanel);
 
@@ -120,12 +127,12 @@ public class MedRec implements EntryPoint {
 		bottomPanel.add(btnDone, 737, 0);
 		btnDone.setSize("53px", "30px");
 
-		AbsolutePanel reconciledPanel = new AbsolutePanel();
+		final AbsolutePanel reconciledPanel = new AbsolutePanel();
 		// absolutePanel.add(reconciledPanel, 0, 316);
 		reconciledPanel.setSize("800px", "252px");
 		rest_of_rest.add(reconciledPanel);
 
-		DockPanel dockPanel_1 = new DockPanel();
+		final DockPanel dockPanel_1 = new DockPanel();
 		dockPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		reconciledPanel.add(dockPanel_1, 0, 0);
 		dockPanel_1.setSize("800px", "252px");
@@ -146,6 +153,32 @@ public class MedRec implements EntryPoint {
 		@SuppressWarnings("unused")
 		ReconciledRenderer recRenderer = new ReconciledRenderer(
 				reconciledTable, reconciledHeadings, bus);
+
+		/* Resize behavior */
+		Window.addResizeHandler(new ResizeHandler() {
+			public void onResize(ResizeEvent event) {
+				int height=event.getHeight();
+				int width=event.getWidth();
+				String new_width=width+"px";
+				
+				rootPanel.setHeight(height+"px");
+				rootPanel.setWidth(new_width);
+				absolutePanel.setHeight(height+"px");
+				absolutePanel.setWidth(new_width);
+				vsPanel.setHeight(height+"px");
+				vsPanel.setWidth(new_width);
+				absolutePanel_1.setWidth(new_width);
+				rest.setWidth(new_width);
+				rest.setHeight((height-52)+"px");
+				rest_of_rest.setWidth(new_width);
+				rest_of_rest.setHeight((height-52-44)+"px");
+				consolidatedPanel.setWidth(new_width);
+				dockPanel.setWidth(new_width);
+				dockPanel_1.setWidth(new_width);
+				bottomPanel.setWidth(new_width);
+				reconciledPanel.setWidth(new_width);
+			}
+		});
 
 		/* Instantiate drop controllers */
 

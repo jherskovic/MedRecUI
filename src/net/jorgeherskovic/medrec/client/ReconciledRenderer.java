@@ -31,12 +31,15 @@ public class ReconciledRenderer extends TableRenderer {
 	public void renderTable() {
 		DraggableFlexTable t = this.getAttachedTable();
 		List<Consolidation> meds = t.getMedList();
-
+		
 		t.removeAllRows();
+		t.clearTargetRows();
+		
 		Map<HTML, Consolidation> rowMapping = t.getRowMapping();
 		rowMapping.clear();
 
 		this.renderTableHeadings("TableHeading");
+		t.setTargetRow(0, 1);
 
 		for (int i = 0; i < meds.size(); i++) {
 			Medication m = meds.get(i).getSelectedMedication();
@@ -66,6 +69,9 @@ public class ReconciledRenderer extends TableRenderer {
 			 */
 			this.applyStyleToAllCellsInRow(i + 1, "SingleRowDesign");
 			this.applyStyleArrayToRow(i + 1, columnStyles);
+			
+			// Every row is its own target in this table
+			t.setTargetRow(i+1, i+1);
 		}
 		
 		int rr=t.getRowToRemove();

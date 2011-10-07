@@ -52,6 +52,7 @@ public class ConsolidatedRenderer extends TableRenderer {
 		t.removeAllRows();
 		Map<HTML, Consolidation> rowMapping = t.getRowMapping();
 		rowMapping.clear();
+		t.clearTargetRows();
 
 		/* In this case, the "rows to remove" array contains the consolidations to remove. Awful semantics, I know, and they require fixing later. */
 		// TODO: Fix row removal semantics
@@ -123,9 +124,15 @@ public class ConsolidatedRenderer extends TableRenderer {
 				my_fades.add(new Fade(t.getRowFormatter().getElement(currentRow)));
 			}
 			
+			t.setTargetRow(currentRow, currentRow);
+			
 			currentRow += 1;
 
 			if (!m2.isEmpty()) {
+				// So there *is* another row in this group.
+				t.setTargetRow(currentRow-1, currentRow);
+				t.setTargetRow(currentRow, currentRow);
+				
 				// Pre-build the current row so resizing works properly
 				for (int j = 0; j < col; j++) {
 					t.setHTML(currentRow, j, "&nbsp;");
@@ -242,7 +249,9 @@ public class ConsolidatedRenderer extends TableRenderer {
 				}
 	
 				currentRow += 1;
-
+			}
+			if (t.getRowCount() > 1) {
+				t.setTargetRow(0, t.getDropTargetRow(1));
 			}
 		}
 

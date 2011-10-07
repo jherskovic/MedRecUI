@@ -1,4 +1,11 @@
-@import url("http://fonts.googleapis.com/css?family=Muli");
+@import url("http://fonts.googleapis.com/css?family=Open+Sans");
+
+#SHARPLogo {
+	height: 64px;
+	width: 800px;
+	position: relative;
+	clear: both;
+}
 
 h1 {
 	background: #F9F9F7 url('images/m1.jpg') repeat-x;
@@ -7,7 +14,7 @@ h1 {
 	color: white;
 	margin: 40px 0px 70px;
 	text-align: center;
-	font-family: 'Muli', verdana, sans-serif;
+	font-family: 'Open Sans', verdana, sans-serif;
 	
 }
 
@@ -48,7 +55,7 @@ h1 {
 	font-size: 180%;
 	color: #c5bfb5;
 	letter-spacing: 1px;
-	font-family: 'Muli', verdana, sans-serif; 
+	font-family: 'Open Sans', verdana, sans-serif; 
 	text-align: left;
 }
 
@@ -63,8 +70,9 @@ h1 {
 	text-align: left;
 	padding-top: 5px;
 	padding-bottom: 5px;
+	border-bottom: 1px solid gray;
 	font-size: 120%;
-	font-family: 'Muli', verdana, sans-serif;
+	font-family: 'Open Sans', verdana, sans-serif;
 }
 
 .EntryNumber {
@@ -107,7 +115,7 @@ h1 {
 }
 
 .DragHandle {
-	font-family: 'Muli', verdana, sans-serif;
+	font-family: 'Open Sans', verdana, sans-serif;
 	text-align: center;
 }
 
@@ -116,44 +124,44 @@ h1 {
 }
 
 .Origin {
-	font-family: 'Muli', verdana, sans-serif; 
+	font-family: 'Open Sans', verdana, sans-serif; 
 	text-align: left;
 }
 
 .Medication {
 	font-size: 110%;
 	font-weight: bold;
-	font-family: 'Muli', verdana, sans-serif; 
+	font-family: 'Open Sans', verdana, sans-serif; 
 	text-align: left;
 }
 
 
 .Dosage {
-	font-family: 'Muli', verdana, sans-serif; 
+	font-family: 'Open Sans', verdana, sans-serif; 
 	text-align: left;
 }
 
 .Frequency {
-	font-family: 'Muli', verdana, sans-serif; 
+	font-family: 'Open Sans', verdana, sans-serif; 
 	text-align: left;
 }
 
 .Date {
-	font-family: 'Muli', verdana, sans-serif; 
+	font-family: 'Open Sans', verdana, sans-serif; 
 	text-align: left;
 }
 
 .Form {
-	font-family: 'Muli', verdana, sans-serif; 
+	font-family: 'Open Sans', verdana, sans-serif; 
 	text-align: left;
 }
 
 .Relation {
-	font-family: 'Muli', verdana, sans-serif; 
+	font-family: 'Open Sans', verdana, sans-serif; 
 	text-align: left;
 }
 
 .Alert {
-	font-family: 'Muli', verdana, sans-serif; 
+	font-family: 'Open Sans', verdana, sans-serif; 
 	text-align: left;
 }

@@ -19,7 +19,7 @@ import com.google.gwt.json.client.JSONValue;
 
 public class MedRecJSONData extends Reconciliation {
 	private final SimpleEventBus bus;
-	
+
 	public MedRecJSONData(String jsonURL, SimpleEventBus bus) {
 		super();
 		// Get the base JSON array
@@ -36,7 +36,8 @@ public class MedRecJSONData extends Reconciliation {
 				public void onResponseReceived(Request request,
 						Response response) {
 					MedRecJSONData.this.parseData(response.getText());
-					MedRecJSONData.this.bus.fireEvent(new FinishedLoadingEvent());
+					MedRecJSONData.this.bus
+							.fireEvent(new FinishedLoadingEvent());
 				}
 			});
 		} catch (com.google.gwt.http.client.RequestException e) {
@@ -45,16 +46,21 @@ public class MedRecJSONData extends Reconciliation {
 		}
 	}
 
+	protected String readJSONFieldOrEmptyString(JSONObject obj, String fieldName) {
+		return obj.containsKey(fieldName) ? obj.get(fieldName).isString()
+				.stringValue() : "";
+	}
+
 	protected Medication medFactory(JSONObject JSONMed) {
 		Medication this_med = new Medication();
-		this_med.setMedicationName(JSONMed.get("medicationName").isString()
-				.stringValue());
-		this_med.setDose(JSONMed.get("dose").isString().stringValue());
-		this_med.setFormulation(JSONMed.get("formulation").isString()
-				.stringValue());
-		this_med.setUnits(JSONMed.get("units").isString().stringValue());
-		this_med.setInstructions(JSONMed.get("instructions").isString()
-				.stringValue());
+
+		this_med.setMedicationName(readJSONFieldOrEmptyString(JSONMed, "medicationName"));
+
+		this_med.setDose(readJSONFieldOrEmptyString(JSONMed, "dose"));
+		this_med.setFormulation(readJSONFieldOrEmptyString(JSONMed, "formulation"));
+		this_med.setUnits(readJSONFieldOrEmptyString(JSONMed, "units"));
+		this_med.setInstructions(readJSONFieldOrEmptyString(JSONMed, "instructions"));
+		this_med.setProvenance(readJSONFieldOrEmptyString(JSONMed, "provenance"));
 
 		return this_med;
 	}
@@ -68,49 +74,51 @@ public class MedRecJSONData extends Reconciliation {
 
 	}
 
-
-	
 	protected void parseData(String text) {
 		JSONValue myData = JSONParser.parseStrict(text);
 		JSONObject myDictionary = myData.isObject();
 		assert (myDictionary != null);
 
-		JSONArray reconciled=myDictionary.get("reconciled").isArray();
-		for (int i=0; i<reconciled.size(); i++) {
-			Consolidation my_consolidation=consFactory(reconciled.get(i).isObject());
+		JSONArray reconciled = myDictionary.get("reconciled").isArray();
+		for (int i = 0; i < reconciled.size(); i++) {
+			Consolidation my_consolidation = consFactory(reconciled.get(i)
+					.isObject());
 			if (my_consolidation.getScore() > 0.99) {
-				this.reconciledMeds.add(new ReconciledMedication(my_consolidation, 0));
+				this.reconciledMeds.add(new ReconciledMedication(
+						my_consolidation, 0));
 			} else {
 				this.consolidatedMeds.add(my_consolidation);
 			}
 		}
-		
+
 		JSONArray new_list;
-		// Read all the "new_lists", which contain unreconciled meds. 
-		int i=1;
-		while (myDictionary.containsKey("new_list_"+i)) {
-			new_list=myDictionary.get("new_list_"+i).isArray();
-			assert(new_list != null);
-			for (int j=0; j<new_list.size(); j++) {
-				Medication this_med=medFactory(new_list.get(j).isObject());
-				
-				Consolidation this_cons=new Consolidation(this_med, new Medication(), 0.0, "Unique");
+		// Read all the "new_lists", which contain unreconciled meds.
+		int i = 1;
+		while (myDictionary.containsKey("new_list_" + i)) {
+			new_list = myDictionary.get("new_list_" + i).isArray();
+			assert (new_list != null);
+			for (int j = 0; j < new_list.size(); j++) {
+				Medication this_med = medFactory(new_list.get(j).isObject());
+
+				Consolidation this_cons = new Consolidation(this_med,
+						new Medication(), 0.0, "Unique");
 				this.consolidatedMeds.add(this_cons);
 			}
 			i++;
 		}
-		
+
 		// For the sake of completeness, read the original lists.
 		JSONArray original_list;
-		i=1;
-		while (myDictionary.containsKey("original_list_"+i)) {
-			original_list=myDictionary.get("original_list_"+i).isArray();
-			assert(original_list != null);
-			String[] this_list=new String[original_list.size()];
-			for (int j=0; j<original_list.size(); j++) {
-				this_list[j]=original_list.get(j).isString().stringValue().trim();
+		i = 1;
+		while (myDictionary.containsKey("original_list_" + i)) {
+			original_list = myDictionary.get("original_list_" + i).isArray();
+			assert (original_list != null);
+			String[] this_list = new String[original_list.size()];
+			for (int j = 0; j < original_list.size(); j++) {
+				this_list[j] = original_list.get(j).isString().stringValue()
+						.trim();
 			}
-			
+
 			this.originalLists.add(this_list);
 			i++;
 		}

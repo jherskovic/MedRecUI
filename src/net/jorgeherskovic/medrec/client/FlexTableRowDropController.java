@@ -111,16 +111,21 @@ public final class FlexTableRowDropController extends
 				LocationWidgetComparator.BOTTOM_HALF_COMPARATOR) - 1;
 
 		if (flexTable.getRowCount() > 0) {
-			Widget w = flexTable.getWidget(targetRow == -1 ? 0 : targetRow, 0);
-			Location widgetLocation = new WidgetLocation(w,
-					context.boundaryPanel);
+			//Widget w = flexTable.getWidget(targetRow == -1 ? 0 : targetRow, 0);
+			if (targetRow<0) {
+				// We don't want people dropping stuff on top of the headers.
+				return;
+			}
+			//Location widgetLocation = new WidgetLocation(w,
+			//		context.boundaryPanel);
 			Location tableLocation = new WidgetLocation(flexTable,
 					context.boundaryPanel);
 			context.boundaryPanel.add(
 					positioner,
 					tableLocation.getLeft(),
-					widgetLocation.getTop()
-							+ (targetRow == -1 ? 0 : w.getOffsetHeight()));
+					tableLocation.getTop() + flexTable.getCumulativeOffsetHeight(targetRow) - 2
+							//+ w.getOffsetHeight());
+					);
 		}
 	}
 
