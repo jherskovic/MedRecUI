@@ -39,7 +39,7 @@ public class ReconciledRenderer extends TableRenderer {
 		rowMapping.clear();
 
 		this.renderTableHeadings("TableHeading");
-		t.setTargetRow(0, 1);
+		t.setTargetRow(0, 0);
 
 		for (int i = 0; i < meds.size(); i++) {
 			Medication m = meds.get(i).getSelectedMedication();

@@ -251,7 +251,7 @@ public class ConsolidatedRenderer extends TableRenderer {
 				currentRow += 1;
 			}
 			if (t.getRowCount() > 1) {
-				t.setTargetRow(0, t.getDropTargetRow(1));
+				t.setTargetRow(0, 0);
 			}
 		}
 
