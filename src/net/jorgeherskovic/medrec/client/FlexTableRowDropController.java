@@ -120,6 +120,7 @@ public final class FlexTableRowDropController extends
 			//		context.boundaryPanel);
 			Location tableLocation = new WidgetLocation(flexTable,
 					context.boundaryPanel);
+			positioner.setHeight(flexTable.getCumulativeOffsetHeight(targetRow)+"px");
 			context.boundaryPanel.add(
 					positioner,
 					tableLocation.getLeft(),

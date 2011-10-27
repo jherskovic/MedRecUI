@@ -14,7 +14,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -103,7 +102,7 @@ public class MedRec implements EntryPoint {
 		consolidatedPanel.add(dockPanel, 0, 0);
 		dockPanel.setSize("800px", "252px");
 
-		Label lblConsolidatedRecord = new Label("Consolidated Record");
+		Label lblConsolidatedRecord = new Label("Unreconciled Record");
 		lblConsolidatedRecord.setStyleName("big-label");
 		lblConsolidatedRecord
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
