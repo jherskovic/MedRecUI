@@ -6,6 +6,7 @@ import java.util.Map;
 import org.adamtacy.client.ui.effects.events.EffectCompletedEvent;
 import org.adamtacy.client.ui.effects.events.EffectCompletedHandler;
 import org.adamtacy.client.ui.effects.impl.Fade;
+import org.adamtacy.client.ui.effects.impl.Resize;
 
 import net.jorgeherskovic.medrec.client.event.RedrawEvent;
 import net.jorgeherskovic.medrec.client.event.RowDroppedEvent;

@@ -11,13 +11,14 @@ import net.jorgeherskovic.medrec.shared.Consolidation;
 import net.jorgeherskovic.medrec.shared.Medication;
 import net.jorgeherskovic.medrec.shared.ReconciledMedication;
 
+import org.adamtacy.client.ui.effects.events.EffectCompletedEvent;
+import org.adamtacy.client.ui.effects.events.EffectCompletedHandler;
+import org.adamtacy.client.ui.effects.impl.Fade;
+
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
-
-import org.adamtacy.client.ui.effects.impl.Fade;
-import org.adamtacy.client.ui.effects.events.*;
 
 public class ConsolidatedRenderer extends TableRenderer {
 	private static String[] columnStyles = { "DragHandle", "Origin",
@@ -35,7 +36,7 @@ public class ConsolidatedRenderer extends TableRenderer {
 		this.getAttachedTable().removeCell(row + 1, col);
 		cf.setRowSpan(row, col, 2);
 	}
-
+	
 	private void flattenCell(int row, int col) {
 		CellFormatter cf = this.getAttachedTable().getCellFormatter();
 		// this.getAttachedTable().getCellFormatter().setHeight(row, col, "0");

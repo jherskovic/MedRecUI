@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.VerticalSplitPanel;
  */
 @SuppressWarnings("deprecation")
 public class MedRec implements EntryPoint {
+
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
@@ -122,7 +123,7 @@ public class MedRec implements EntryPoint {
 		bottomPanel.setSize("800px", "30px");
 		rest.setBottomWidget(bottomPanel);
 
-		Button btnDone = new Button("Done");
+		final Button btnDone = new Button("Done");
 		bottomPanel.add(btnDone, 737, 0);
 		btnDone.setSize("53px", "30px");
 
@@ -154,10 +155,8 @@ public class MedRec implements EntryPoint {
 				reconciledTable, reconciledHeadings, bus);
 
 		/* Resize behavior */
-		Window.addResizeHandler(new ResizeHandler() {
-			public void onResize(ResizeEvent event) {
-				int height=event.getHeight();
-				int width=event.getWidth();
+		final UIResizer resizer=new UIResizer() {
+			public void resizeUI(int width, int height) {
 				String new_width=width+"px";
 				
 				rootPanel.setHeight(height+"px");
@@ -176,8 +175,21 @@ public class MedRec implements EntryPoint {
 				dockPanel_1.setWidth(new_width);
 				bottomPanel.setWidth(new_width);
 				reconciledPanel.setWidth(new_width);
+				btnDone.removeFromParent();
+				bottomPanel.add(btnDone, width-83, 0);
 			}
-		});
+			
+		};
+		
+		ResizeHandler rh=new ResizeHandler() {
+			public void onResize(ResizeEvent event) {
+				int height=event.getHeight();
+				int width=event.getWidth();
+				
+				resizer.resizeUI(width, height);
+			}
+		};
+		Window.addResizeHandler(rh);
 
 		/* Instantiate drop controllers */
 
@@ -185,6 +197,9 @@ public class MedRec implements EntryPoint {
 		row_dc.registerDropController(ct_dc);
 		row_dc.registerDropController(rc_dc);
 
+		// Adjust sizes
+		resizer.resizeUI(Window.getClientWidth(), Window.getClientHeight());
+		
 		bus.addHandler(FinishedLoadingEvent.TYPE,
 				new FinishedLoadingEventHandler() {
 
@@ -200,7 +215,7 @@ public class MedRec implements EntryPoint {
 					}
 
 				});
-
+		
 		/* Read data */
 		this.myData = new MedRecJSONData(JSON_URL, bus);
 		//this.myData = new SampleData();
