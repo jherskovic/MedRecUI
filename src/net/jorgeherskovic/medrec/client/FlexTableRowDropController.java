@@ -19,7 +19,6 @@ package net.jorgeherskovic.medrec.client;
 import net.jorgeherskovic.medrec.client.event.RowDroppedEvent;
 
 import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.InsertPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
