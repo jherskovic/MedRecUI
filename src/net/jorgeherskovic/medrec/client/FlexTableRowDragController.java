@@ -18,6 +18,7 @@ package net.jorgeherskovic.medrec.client;
 
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.allen_sauer.gwt.dnd.client.DragContext;
@@ -29,7 +30,7 @@ import com.allen_sauer.gwt.dnd.client.drop.BoundaryDropController;
  */
 public final class FlexTableRowDragController extends PickupDragController {
 
-	private static final String CSS_DEMO_FLEX_TABLE_ROW_EXAMPLE_TABLE_PROXY = "demo-FlexTableRowExample-table-proxy";
+	private static final String CSS_TABLE_PROXY_STYLE = "TableDesign";
 
 	private DraggableFlexTable draggableTable;
 
@@ -72,10 +73,18 @@ public final class FlexTableRowDragController extends PickupDragController {
 	protected Widget newDragProxy(DragContext context) {
 		FlexTable proxy;
 		proxy = new FlexTable();
-		proxy.addStyleName(CSS_DEMO_FLEX_TABLE_ROW_EXAMPLE_TABLE_PROXY);
+		proxy.addStyleName(CSS_TABLE_PROXY_STYLE);
 		draggableTable = (DraggableFlexTable) context.draggable.getParent();
 		dragRow = getWidgetRow(context.draggable, draggableTable);
 		FlexTableUtil.copyRow(draggableTable, proxy, dragRow, 0);
+		// Format the draggable row
+		proxy.getRowFormatter().setStyleName(0, draggableTable.getRowFormatter().getStyleName(dragRow));
+		CellFormatter proxyFormatter=proxy.getCellFormatter();
+		CellFormatter originFormatter=draggableTable.getCellFormatter();
+		
+		for (int i = 0; i < proxy.getCellCount(0); i++) {
+			proxyFormatter.setStyleName(0, i, originFormatter.getStyleName(dragRow, i));
+		}
 		return proxy;
 	}
 

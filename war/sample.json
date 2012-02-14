@@ -28,7 +28,8 @@
                 "formulation": "TABLET", 
                 "units": "MG", 
                 "instructions": "TAKE 1 TABLET TWICE DAILY, WITH MORNING AND EVENING MEAL; RPT",
-				"provenance": "Patient"
+				"provenance": "Patient",
+				"startDate": "2011.12.24"
             }, 
             "score": 1.0, 
             "mechanism": "brand name"

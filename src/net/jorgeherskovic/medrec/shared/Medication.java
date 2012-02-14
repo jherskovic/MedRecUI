@@ -129,6 +129,15 @@ public class Medication {
 		this.startDate = startDate;
 	}
 
+	public void setStartDate(String startDate) {
+		try {
+			this.startDate = myDTFormat.parse(startDate);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			this.startDate = Medication.nullDate;
+		}
+	}
+	
 	/**
 	 * @return the endDate
 	 */
@@ -144,6 +153,15 @@ public class Medication {
 		this.endDate = endDate;
 	}
 
+	public void setEndDate(String endDate) {
+		try {
+			this.endDate = myDTFormat.parse(endDate);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			this.endDate = Medication.nullDate;
+		}
+	}
+	
 	public String getStartDateString() {
 		if (startDate.equals(Medication.nullDate)) {
 			return "";
@@ -180,7 +198,7 @@ public class Medication {
 		this.units = toProperCase(units);
 		this.formulation = toProperCase(formulation);
 		this.instructions = toProperCase(instructions);
-		this.provenance = toProperCase(provenance);
+		this.provenance = provenance;
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
@@ -215,16 +233,9 @@ public class Medication {
 		this.formulation = tokens[3];
 		this.instructions = tokens[4];
 		this.provenance = tokens[5];
-		try {
-			this.startDate = myDTFormat.parse(tokens[6]);
-		} catch (Exception e) {
-			this.startDate = Medication.nullDate;
-		}
-		try {
-			this.endDate = myDTFormat.parse(tokens[7]);
-		} catch (Exception e) {
-			this.endDate = Medication.nullDate;
-		}
+		this.setStartDate(tokens[6]);
+		this.setEndDate(tokens[7]);
+		
 	}
 
 	public boolean equals(Medication other) {

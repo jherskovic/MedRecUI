@@ -61,6 +61,8 @@ public class MedRecJSONData extends Reconciliation {
 		this_med.setUnits(readJSONFieldOrEmptyString(JSONMed, "units"));
 		this_med.setInstructions(readJSONFieldOrEmptyString(JSONMed, "instructions"));
 		this_med.setProvenance(readJSONFieldOrEmptyString(JSONMed, "provenance"));
+		this_med.setStartDate(readJSONFieldOrEmptyString(JSONMed, "startDate"));
+		this_med.setEndDate(readJSONFieldOrEmptyString(JSONMed, "endDate"));
 
 		return this_med;
 	}

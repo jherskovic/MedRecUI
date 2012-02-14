@@ -58,40 +58,40 @@ public class MedRec implements EntryPoint {
 		FlexTableRowDragController row_dc = new FlexTableRowDragController(
 				absolutePanel);
 
-		final VerticalSplitPanel vsPanel = new VerticalSplitPanel();
-		absolutePanel.add(vsPanel);
-		vsPanel.setSize("800px", "600px");
+//		final VerticalSplitPanel vsPanel = new VerticalSplitPanel();
+//		absolutePanel.add(vsPanel);
+//		vsPanel.setSize("800px", "600px");
 
-		final AbsolutePanel absolutePanel_1 = new AbsolutePanel();
-		absolutePanel_1.setStyleName("provenance");
-		// absolutePanel.add(absolutePanel_1, 0, 0);
-		absolutePanel_1.setSize("800px", "52px");
-
-		Label lblNewLabel = new Label("List 1 comes from");
-		absolutePanel_1.add(lblNewLabel, 10, 0);
-
-		TextBox list1origin = new TextBox();
-		absolutePanel_1.add(list1origin, 10, 18);
-		list1origin.setSize("291px", "18px");
-
-		Label lblListComes = new Label("List 2 comes from");
-		absolutePanel_1.add(lblListComes, 489, 0);
-		lblListComes.setSize("105px", "18px");
-
-		TextBox list2origin = new TextBox();
-		absolutePanel_1.add(list2origin, 489, 18);
-		list2origin.setSize("291px", "18px");
-
-		vsPanel.setTopWidget(absolutePanel_1);
-		vsPanel.setSplitPosition("52px");
+//		final AbsolutePanel absolutePanel_1 = new AbsolutePanel();
+//		absolutePanel_1.setStyleName("provenance");
+//		// absolutePanel.add(absolutePanel_1, 0, 0);
+//		absolutePanel_1.setSize("800px", "52px");
+//
+//		Label lblNewLabel = new Label("List 1 comes from");
+//		absolutePanel_1.add(lblNewLabel, 10, 0);
+//
+//		TextBox list1origin = new TextBox();
+//		absolutePanel_1.add(list1origin, 10, 18);
+//		list1origin.setSize("291px", "18px");
+//
+//		Label lblListComes = new Label("List 2 comes from");
+//		absolutePanel_1.add(lblListComes, 489, 0);
+//		lblListComes.setSize("105px", "18px");
+//
+//		TextBox list2origin = new TextBox();
+//		absolutePanel_1.add(list2origin, 489, 18);
+//		list2origin.setSize("291px", "18px");
+//
+//		vsPanel.setTopWidget(absolutePanel_1);
+//		vsPanel.setSplitPosition("52px");
 
 		final VerticalSplitPanel rest = new VerticalSplitPanel();
-		rest.setSize("800px", "548px");
-		vsPanel.setBottomWidget(rest);
-		rest.setSplitPosition("505px");
+		rest.setSize("800px", "600px");
+		absolutePanel.add(rest);
+		rest.setSplitPosition("557px");
 
 		final VerticalSplitPanel rest_of_rest = new VerticalSplitPanel();
-		rest_of_rest.setSize("800px", "504px");
+		rest_of_rest.setSize("800px", "557px");
 		final AbsolutePanel consolidatedPanel = new AbsolutePanel();
 		// absolutePanel.add(consolidatedPanel, 0, 58);
 		consolidatedPanel.setSize("800px", "252px");
@@ -112,7 +112,7 @@ public class MedRec implements EntryPoint {
 		final DraggableFlexTable consolidatedTable = new DraggableFlexTable(
 				row_dc, null);
 		consolidatedTable.setStyleName("TableDesign");
-		dockPanel.add(consolidatedTable, DockPanel.CENTER);
+		dockPanel.add(consolidatedTable, DockPanel.NORTH);
 		FlexTableRowDropController ct_dc = new FlexTableRowDropController(
 				consolidatedTable, this.bus);
 		@SuppressWarnings("unused")
@@ -163,13 +163,13 @@ public class MedRec implements EntryPoint {
 				rootPanel.setWidth(new_width);
 				absolutePanel.setHeight(height+"px");
 				absolutePanel.setWidth(new_width);
-				vsPanel.setHeight(height+"px");
-				vsPanel.setWidth(new_width);
-				absolutePanel_1.setWidth(new_width);
+//				vsPanel.setHeight(height+"px");
+//				vsPanel.setWidth(new_width);
+//				absolutePanel_1.setWidth(new_width);
 				rest.setWidth(new_width);
-				rest.setHeight((height-52)+"px");
+				rest.setHeight((height)+"px");
 				rest_of_rest.setWidth(new_width);
-				rest_of_rest.setHeight((height-52-44)+"px");
+				rest_of_rest.setHeight((height-44)+"px");
 				consolidatedPanel.setWidth(new_width);
 				dockPanel.setWidth(new_width);
 				dockPanel_1.setWidth(new_width);
