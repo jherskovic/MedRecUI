@@ -38,7 +38,7 @@ public class Medication {
 	 *            the provenance to set
 	 */
 	public void setProvenance(String provenance) {
-		this.provenance = toProperCase(provenance);
+		this.provenance = provenance;
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class Medication {
 	 *            the medicationName to set
 	 */
 	public void setMedicationName(String medicationName) {
-		this.medicationName = toProperCase(medicationName);
+		this.medicationName = medicationName;
 	}
 
 	/**

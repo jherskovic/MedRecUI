@@ -55,8 +55,6 @@ public class ReconciledRenderer extends TableRenderer {
 		this.applyStyleArrayToRow(rownum, columnStyles);
 		
 		// Every row is its own target in this table
-		t.setTargetRow(rownum, rownum);
-		
 		return handle;
 	}
 	
@@ -73,15 +71,29 @@ public class ReconciledRenderer extends TableRenderer {
 		t.getRowFormatter().addStyleName(rownum, "FullReconciliation");
 		this.applyStyleToAllCellsInRow(rownum, "SingleRowDesign");
 		this.applyStyleArrayToRow(rownum, columnStyles);
-
+		// Discover the width of the table headings
+		//int headerWidth=0;
+		
+		//for (int i = col; i<t.getCellCount(0); i++) {
+		//	t.addCell(rownum);
+		//}
+		
+		// Merge all cells to the right of the 
+		t.getFlexCellFormatter().setColSpan(rownum, col - 1, t.getCellCount(0) - 1);
+		
 		return handle;
 	}
 	
 	private HTML renderRow(DraggableFlexTable t, int rownum, Medication m) {
+		HTML result;
 		if (m.isParsed())
-			return renderParsedRow(t, rownum, m);
+			result=renderParsedRow(t, rownum, m);
+		else
+			result=renderUnparsedRow(t, rownum, m);
 		
-		return renderUnparsedRow(t, rownum, m);
+		t.setTargetRow(rownum, rownum);
+		
+		return result;
 	}
 	
 	@Override

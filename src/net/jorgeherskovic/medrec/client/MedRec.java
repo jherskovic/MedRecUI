@@ -32,7 +32,10 @@ public class MedRec implements EntryPoint {
 	/**
 	 * This is the entry point method.
 	 */
-	private static final String JSON_URL = "sample.json";
+
+	//private static final String JSON_URL = "sample.json";
+	private static final String JSON_URL=Window.Location.getParameter("json_src");
+	
 	private Reconciliation myData;
 	private final SimpleEventBus bus = new SimpleEventBus();
 

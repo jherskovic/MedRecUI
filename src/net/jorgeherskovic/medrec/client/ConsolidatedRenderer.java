@@ -45,6 +45,97 @@ public class ConsolidatedRenderer extends TableRenderer {
 		cf.addStyleName(row, col, "FullReconciliation");
 	}
 
+	private String getReconciliationStyle(Consolidation cons) {
+		String thisStyle = "NoReconciliation";
+		if (cons.getScore() > 0.1) {
+			thisStyle = "PartialReconciliation";
+		}
+		if (cons.getScore() > 0.99) {
+			thisStyle = "FullReconciliation";	
+		}
+		
+		return thisStyle;
+	}
+	
+	// returns the handle to the drag token
+	private HTML renderParsedRow(DraggableFlexTable t, int rownum, Consolidation this_cons, Medication m) {
+		int col = 0;
+
+		HTML handle = new HTML(this.dragToken);
+		t.setWidget(rownum, col++, handle);
+		t.getRowDragController().makeDraggable(handle);
+
+	
+		// t.setText(currentRow, col++, Integer.toString(i + 1)); //No entry
+		// number
+
+		t.setHTML(rownum, col++, m.getProvenance());
+
+		t.setHTML(rownum, col++, m.getMedicationName());
+		String dosage1 = m.getDose() + " " + m.getUnits();
+		t.setHTML(rownum, col++, dosage1);
+		t.setHTML(rownum, col++, m.getInstructions());
+		t.setHTML(rownum, col++, m.getStartDateString());
+		t.setHTML(rownum, col++, m.getEndDateString());
+		t.setHTML(rownum, col++, m.getFormulation());
+		t.setText(rownum, col++, this_cons.getExplanation());
+
+		String thisStyle = getReconciliationStyle(this_cons);
+		t.getRowFormatter().addStyleName(rownum, thisStyle);
+
+		String cellFormatStyle;
+
+		if (this_cons.length == 1) {
+			cellFormatStyle = "SingleRowDesign";
+		} else {
+			cellFormatStyle = "MultiRowTopDesign";
+		}
+
+		t.getRowFormatter().addStyleName(rownum, cellFormatStyle);
+
+		/*
+		 * Apply the TableDesign style to each cell individually to get
+		 * borders
+		 */
+		this.applyStyleToAllCellsInRow(rownum, cellFormatStyle);
+		this.applyStyleArrayToRow(rownum, columnStyles);
+
+		return handle;
+	}
+	
+	private HTML renderUnparsedRow(DraggableFlexTable t, int rownum, Consolidation this_cons, Medication m) {
+		int col = 0;
+
+		HTML handle = new HTML(this.dragToken);
+		t.setWidget(rownum, col++, handle);
+		t.getRowDragController().makeDraggable(handle);
+
+		t.setHTML(rownum, col++, m.getOriginalString());
+		
+		t.getRowFormatter().addStyleName(rownum, "SingleRowDesign");
+		t.getRowFormatter().addStyleName(rownum, "NoReconciliation");
+		this.applyStyleToAllCellsInRow(rownum, "SingleRowDesign");
+		this.applyStyleArrayToRow(rownum, columnStyles);
+		// Discover the width of the table headings
+		//int headerWidth=0;
+		
+		//for (int i = col; i<t.getCellCount(0); i++) {
+		//	t.addCell(rownum);
+		//}
+		
+		// Merge all cells to the right of the 
+		t.getFlexCellFormatter().setColSpan(rownum, col - 1, t.getCellCount(0) - 1);
+		
+		return handle;
+	}
+	
+	private HTML renderRow(DraggableFlexTable t, int rownum, Consolidation cons, Medication m) {
+		if (m.isParsed())
+			return renderParsedRow(t, rownum, cons, m);
+		
+		return renderUnparsedRow(t, rownum, cons, m);
+	}
+
 	@Override
 	public void renderTable() {
 		DraggableFlexTable t = this.getAttachedTable();
@@ -69,67 +160,20 @@ public class ConsolidatedRenderer extends TableRenderer {
 			Medication m1 = this_cons.getMed1();
 			Medication m2 = this_cons.getMed2();
 			
-			int col = 0;
-
-			/* Create an HTML widget and make it draggable */
-
-			HTML handle = new HTML();
-			handle.setHTML(this.dragToken);
-			
-			t.setWidget(currentRow, col++, handle);
-			t.getRowDragController().makeDraggable(handle);
-
-			rowMapping.put(handle, this_cons);
-
-			// t.setText(currentRow, col++, Integer.toString(i + 1)); //No entry
-			// number
-
-			t.setHTML(currentRow, col++, m1.getProvenance());
-
-			t.setHTML(currentRow, col++, m1.getMedicationName());
-			String dosage1 = m1.getDose() + " " + m1.getUnits();
-			t.setHTML(currentRow, col++, dosage1);
-			t.setHTML(currentRow, col++, m1.getInstructions());
-			t.setHTML(currentRow, col++, m1.getStartDateString());
-			t.setHTML(currentRow, col++, m1.getEndDateString());
-			t.setHTML(currentRow, col++, m1.getFormulation());
-			t.setText(currentRow, col++, this_cons.getExplanation());
-
-			String thisStyle = "NoReconciliation";
-			if (this_cons.getScore() > 0.1) {
-				thisStyle = "PartialReconciliation";
-			}
-			if (this_cons.getScore() > 0.99) {
-				thisStyle = "FullReconciliation";
-			}
-			t.getRowFormatter().addStyleName(currentRow, thisStyle);
-
-			String cellFormatStyle;
-
-			if (this_cons.length == 1) {
-				cellFormatStyle = "SingleRowDesign";
-			} else {
-				cellFormatStyle = "MultiRowTopDesign";
-			}
-
-			t.getRowFormatter().addStyleName(currentRow, cellFormatStyle);
-
-			/*
-			 * Apply the TableDesign style to each cell individually to get
-			 * borders
-			 */
-			this.applyStyleToAllCellsInRow(currentRow, cellFormatStyle);
-			this.applyStyleArrayToRow(currentRow, columnStyles);
+			HTML handle= renderRow(t, currentRow, this_cons, m1);
 
 			if (t.isRowRemovable(i)) {
 				my_fades.add(new Fade(t.getRowFormatter().getElement(currentRow)));
 			}
 			
 			t.setTargetRow(currentRow, currentRow);
+			rowMapping.put(handle, this_cons);
 			
+			int col = t.getCellCount(currentRow);
 			currentRow += 1;
-
+			
 			if (!m2.isEmpty()) {
+				String thisStyle = getReconciliationStyle(this_cons);
 				// So there *is* another row in this group.
 				t.setTargetRow(currentRow-1, currentRow);
 				t.setTargetRow(currentRow, currentRow);
@@ -172,6 +216,7 @@ public class ConsolidatedRenderer extends TableRenderer {
 				}
 
 				String dosage2 = m2.getDose() + " " + m2.getUnits();
+				String dosage1 = m1.getDose() + " " + m1.getUnits();
 				if (dosage2.equals(dosage1)) {
 					// t.addCell(currentRow);
 					// flattenCell(currentRow, col);

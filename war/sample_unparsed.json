@@ -1,0 +1,272 @@
+{
+    "original_list_2": [
+        "Rapamycin 3 mg p.o. every other day alternating with 4mg", 
+        "CellCept 500 mg b.i.d.", 
+        "Hydrochlorothiazide 25 mg p.o. daily.", 
+        "Allopurinol 200 mg p.o. daily.", 
+        "Rocaltrol 25 mcg weekly.", 
+        "Sodium bicarbonate 3 tabs b.i.d.", 
+        "Norvasc 5mg PO q day", 
+        "Prednisone stopped yesterday."
+    ], 
+    "reconciled": [
+        {
+            "identical": [
+                "NORMALIZED_DOSE", 
+                "UNITS", 
+                "DRUG_NAME", 
+                "FORMULATION", 
+                "SIG", 
+                "DOSE"
+            ], 
+            "med2": {
+                "normalized_dose": null, 
+                "provenance": "List 1", 
+                "formulation": "None", 
+                "units": "None", 
+                "parsed": false, 
+                "instructions": "None", 
+                "original_string": "Sodium bicarbonate 3 tabs b.i.d.", 
+                "id": 1, 
+                "medicationName": "None", 
+                "dose": "None"
+            }, 
+            "med1": {
+                "normalized_dose": null, 
+                "provenance": "List 1", 
+                "formulation": "None", 
+                "units": "None", 
+                "parsed": false, 
+                "instructions": "None", 
+                "original_string": "Sodium bicarbonate 3 tabs b.i.d.", 
+                "id": 1, 
+                "medicationName": "None", 
+                "dose": "None"
+            }, 
+            "score": 1.0, 
+            "mechanism": "Identical strings"
+        }, 
+        {
+            "identical": [
+                "NORMALIZED_DOSE", 
+                "UNITS", 
+                "DRUG_NAME", 
+                "FORMULATION", 
+                "SIG", 
+                "DOSE"
+            ], 
+            "med2": {
+                "normalized_dose": null, 
+                "provenance": "List 1", 
+                "formulation": "", 
+                "units": "MG", 
+                "parsed": true, 
+                "instructions": "B.I.D", 
+                "original_string": "CellCept 500 mg b.i.d.", 
+                "id": 2, 
+                "medicationName": "CELLCEPT", 
+                "dose": "500"
+            }, 
+            "med1": {
+                "normalized_dose": null, 
+                "provenance": "List 1", 
+                "formulation": "", 
+                "units": "MG", 
+                "parsed": true, 
+                "instructions": "B.I.D", 
+                "original_string": "CellCept 500 mg b.i.d.", 
+                "id": 2, 
+                "medicationName": "CELLCEPT", 
+                "dose": "500"
+            }, 
+            "score": 1.0, 
+            "mechanism": "Identical strings"
+        }, 
+        {
+            "identical": [
+                "NORMALIZED_DOSE", 
+                "UNITS", 
+                "DRUG_NAME", 
+                "FORMULATION", 
+                "SIG", 
+                "DOSE"
+            ], 
+            "med2": {
+                "normalized_dose": null, 
+                "provenance": "List 1", 
+                "formulation": "", 
+                "units": "MG", 
+                "parsed": true, 
+                "instructions": "P.O. DAILY", 
+                "original_string": "Hydrochlorothiazide 25 mg p.o. daily.", 
+                "id": 3, 
+                "medicationName": "HYDROCHLOROTHIAZIDE", 
+                "dose": "25"
+            }, 
+            "med1": {
+                "normalized_dose": null, 
+                "provenance": "List 1", 
+                "formulation": "", 
+                "units": "MG", 
+                "parsed": true, 
+                "instructions": "P.O. DAILY", 
+                "original_string": "Hydrochlorothiazide 25 mg p.o. daily.", 
+                "id": 3, 
+                "medicationName": "HYDROCHLOROTHIAZIDE", 
+                "dose": "25"
+            }, 
+            "score": 1.0, 
+            "mechanism": "Identical strings"
+        }, 
+        {
+            "identical": [
+                "NORMALIZED_DOSE", 
+                "UNITS", 
+                "DRUG_NAME", 
+                "FORMULATION", 
+                "SIG", 
+                "DOSE"
+            ], 
+            "med2": {
+                "normalized_dose": null, 
+                "provenance": "List 1", 
+                "formulation": "", 
+                "units": "MCG", 
+                "parsed": true, 
+                "instructions": "WEEKLY", 
+                "original_string": "Rocaltrol 25 mcg weekly.", 
+                "id": 4, 
+                "medicationName": "ROCALTROL", 
+                "dose": "25"
+            }, 
+            "med1": {
+                "normalized_dose": null, 
+                "provenance": "List 1", 
+                "formulation": "", 
+                "units": "MCG", 
+                "parsed": true, 
+                "instructions": "WEEKLY", 
+                "original_string": "Rocaltrol 25 mcg weekly.", 
+                "id": 4, 
+                "medicationName": "ROCALTROL", 
+                "dose": "25"
+            }, 
+            "score": 1.0, 
+            "mechanism": "Identical strings"
+        }, 
+        {
+            "identical": [
+                "NORMALIZED_DOSE", 
+                "UNITS", 
+                "DRUG_NAME", 
+                "FORMULATION", 
+                "SIG", 
+                "DOSE"
+            ], 
+            "med2": {
+                "normalized_dose": null, 
+                "provenance": "List 1", 
+                "formulation": "None", 
+                "units": "None", 
+                "parsed": false, 
+                "instructions": "None", 
+                "original_string": "Norvasc 5mg PO q day", 
+                "id": 6, 
+                "medicationName": "None", 
+                "dose": "None"
+            }, 
+            "med1": {
+                "normalized_dose": null, 
+                "provenance": "List 1", 
+                "formulation": "None", 
+                "units": "None", 
+                "parsed": false, 
+                "instructions": "None", 
+                "original_string": "Norvasc 5mg PO q day", 
+                "id": 6, 
+                "medicationName": "None", 
+                "dose": "None"
+            }, 
+            "score": 1.0, 
+            "mechanism": "Identical strings"
+        }, 
+        {
+            "identical": [], 
+            "med2": {
+                "normalized_dose": "200 MG*1*1", 
+                "provenance": "List 2", 
+                "formulation": "", 
+                "units": "MG", 
+                "parsed": true, 
+                "instructions": "P.O. DAILY", 
+                "original_string": "Allopurinol 200 mg p.o. daily.", 
+                "id": 10, 
+                "medicationName": "ALLOPURINOL", 
+                "dose": "200"
+            }, 
+            "med1": {
+                "normalized_dose": "100 MG*1*1", 
+                "provenance": "List 1", 
+                "formulation": "", 
+                "units": "MG", 
+                "parsed": true, 
+                "instructions": "P.O. DAILY", 
+                "original_string": "Allopurinol 100 mg p.o. daily.", 
+                "id": 5, 
+                "medicationName": "ALLOPURINOL", 
+                "dose": "100"
+            }, 
+            "score": 0.5, 
+            "mechanism": "Similar treatment intent"
+        }
+    ], 
+    "original_list_1": [
+        "Rapamycin 2 mg p.o. daily", 
+        "Sodium bicarbonate 3 tabs b.i.d.", 
+        "CellCept 500 mg b.i.d.", 
+        "Hydrochlorothiazide 25 mg p.o. daily.", 
+        "Rocaltrol 25 mcg weekly.", 
+        "Allopurinol 100 mg p.o. daily.", 
+        "Norvasc 5mg PO q day"
+    ], 
+    "new_list_2": [
+        {
+            "normalized_dose": "3 MG*1*1", 
+            "provenance": "List 2", 
+            "formulation": "", 
+            "units": "MG", 
+            "parsed": true, 
+            "instructions": "P.O. EVERY OTHER DAY ALTERNATING WITH 4MG", 
+            "original_string": "Rapamycin 3 mg p.o. every other day alternating with 4mg", 
+            "id": 7, 
+            "medicationName": "RAPAMYCIN", 
+            "dose": "3"
+        }, 
+        {
+            "normalized_dose": null, 
+            "provenance": "List 2", 
+            "formulation": "None", 
+            "units": "None", 
+            "parsed": false, 
+            "instructions": "None", 
+            "original_string": "Prednisone stopped yesterday.", 
+            "id": 14, 
+            "medicationName": "None", 
+            "dose": "None"
+        }
+    ], 
+    "new_list_1": [
+        {
+            "normalized_dose": "2 MG*1*1", 
+            "provenance": "List 1", 
+            "formulation": "", 
+            "units": "MG", 
+            "parsed": true, 
+            "instructions": "P.O. DAILY", 
+            "original_string": "Rapamycin 2 mg p.o. daily", 
+            "id": 0, 
+            "medicationName": "RAPAMYCIN", 
+            "dose": "2"
+        }
+    ]
+}
