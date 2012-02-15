@@ -65,10 +65,6 @@ public class ConsolidatedRenderer extends TableRenderer {
 		t.setWidget(rownum, col++, handle);
 		t.getRowDragController().makeDraggable(handle);
 
-	
-		// t.setText(currentRow, col++, Integer.toString(i + 1)); //No entry
-		// number
-
 		t.setHTML(rownum, col++, m.getProvenance());
 
 		t.setHTML(rownum, col++, m.getMedicationName());

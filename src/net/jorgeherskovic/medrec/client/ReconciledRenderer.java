@@ -71,14 +71,8 @@ public class ReconciledRenderer extends TableRenderer {
 		t.getRowFormatter().addStyleName(rownum, "FullReconciliation");
 		this.applyStyleToAllCellsInRow(rownum, "SingleRowDesign");
 		this.applyStyleArrayToRow(rownum, columnStyles);
-		// Discover the width of the table headings
-		//int headerWidth=0;
-		
-		//for (int i = col; i<t.getCellCount(0); i++) {
-		//	t.addCell(rownum);
-		//}
-		
-		// Merge all cells to the right of the 
+
+		// Merge all cells to the right of the single text row 
 		t.getFlexCellFormatter().setColSpan(rownum, col - 1, t.getCellCount(0) - 1);
 		
 		return handle;
