@@ -27,6 +27,63 @@ public class ReconciledRenderer extends TableRenderer {
 		super(table, headings, bus);
 	}
 
+	// returns the handle to the drag token
+	private HTML renderParsedRow(DraggableFlexTable t, int rownum, Medication m) {
+		int col = 0;
+
+		HTML handle = new HTML(this.dragToken);
+		t.setWidget(rownum, col++, handle);
+		t.getRowDragController().makeDraggable(handle);
+
+		// t.setText(rownum, col++, Integer.toString(rownum)); // No entry number
+		t.setHTML(rownum, col++, m.getProvenance());
+		t.setHTML(rownum, col++, m.getMedicationName());
+		t.setHTML(rownum, col++, m.getDose() + " " + m.getUnits());
+		t.setHTML(rownum, col++, m.getInstructions());
+		t.setHTML(rownum, col++, m.getStartDateString());
+		t.setHTML(rownum, col++, m.getEndDateString());
+		t.setHTML(rownum, col++, m.getFormulation());
+		t.setText(rownum, col++, "");
+
+		t.getRowFormatter().addStyleName(rownum, "SingleRowDesign");
+		t.getRowFormatter().addStyleName(rownum, "FullReconciliation");
+		/*
+		 * Apply the TableDesign style to each cell individually to get
+		 * borders
+		 */
+		this.applyStyleToAllCellsInRow(rownum, "SingleRowDesign");
+		this.applyStyleArrayToRow(rownum, columnStyles);
+		
+		// Every row is its own target in this table
+		t.setTargetRow(rownum, rownum);
+		
+		return handle;
+	}
+	
+	private HTML renderUnparsedRow(DraggableFlexTable t, int rownum, Medication m) {
+		int col = 0;
+
+		HTML handle = new HTML(this.dragToken);
+		t.setWidget(rownum, col++, handle);
+		t.getRowDragController().makeDraggable(handle);
+
+		t.setHTML(rownum, col++, m.getOriginalString());
+		
+		t.getRowFormatter().addStyleName(rownum, "SingleRowDesign");
+		t.getRowFormatter().addStyleName(rownum, "FullReconciliation");
+		this.applyStyleToAllCellsInRow(rownum, "SingleRowDesign");
+		this.applyStyleArrayToRow(rownum, columnStyles);
+
+		return handle;
+	}
+	
+	private HTML renderRow(DraggableFlexTable t, int rownum, Medication m) {
+		if (m.isParsed())
+			return renderParsedRow(t, rownum, m);
+		
+		return renderUnparsedRow(t, rownum, m);
+	}
+	
 	@Override
 	public void renderTable() {
 		DraggableFlexTable t = this.getAttachedTable();
@@ -43,35 +100,8 @@ public class ReconciledRenderer extends TableRenderer {
 
 		for (int i = 0; i < meds.size(); i++) {
 			Medication m = meds.get(i).getSelectedMedication();
-			int col = 0;
-
-			HTML handle = new HTML(this.dragToken);
-			t.setWidget(i + 1, col++, handle);
-			t.getRowDragController().makeDraggable(handle);
-
+			HTML handle=renderRow(t, i + 1, m);
 			rowMapping.put(handle, meds.get(i));
-
-			// t.setText(i + 1, col++, Integer.toString(i + 1)); // No entry number
-			t.setHTML(i + 1, col++, m.getProvenance());
-			t.setHTML(i + 1, col++, m.getMedicationName());
-			t.setHTML(i + 1, col++, m.getDose() + " " + m.getUnits());
-			t.setHTML(i + 1, col++, m.getInstructions());
-			t.setHTML(i + 1, col++, m.getStartDateString());
-			t.setHTML(i + 1, col++, m.getEndDateString());
-			t.setHTML(i + 1, col++, m.getFormulation());
-			t.setText(i + 1, col++, "");
-
-			t.getRowFormatter().addStyleName(i + 1, "SingleRowDesign");
-			t.getRowFormatter().addStyleName(i + 1, "FullReconciliation");
-			/*
-			 * Apply the TableDesign style to each cell individually to get
-			 * borders
-			 */
-			this.applyStyleToAllCellsInRow(i + 1, "SingleRowDesign");
-			this.applyStyleArrayToRow(i + 1, columnStyles);
-			
-			// Every row is its own target in this table
-			t.setTargetRow(i+1, i+1);
 		}
 		
 		int rr=t.getRowToRemove();

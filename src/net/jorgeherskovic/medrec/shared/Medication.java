@@ -18,7 +18,9 @@ public class Medication {
 	private String instructions;
 	private Date startDate;
 	private Date endDate;
+	private boolean parsed;
 	private String provenance;
+	private String originalString;
 	static Date nullDate = new Date(0);
 	static DateTimeFormat myDTFormat = DateTimeFormat.getFormat("yyyy.MM.dd");
 	static DateTimeFormat myOutputFormat = DateTimeFormat
@@ -178,6 +180,22 @@ public class Medication {
 		return myOutputFormat.format(endDate);
 	}
 	
+	public String getOriginalString() {
+		return originalString;
+	}
+
+	public void setOriginalString(String originalString) {
+		this.originalString = originalString;
+	}
+
+	public boolean isParsed() {
+		return parsed;
+	}
+
+	public void setParsed(boolean parsed) {
+		this.parsed = parsed;
+	}
+
 	private static String toProperCase(String name) {
 		  if (name == null || name.trim().length() == 0) {
 		    return name;
@@ -201,6 +219,8 @@ public class Medication {
 		this.provenance = provenance;
 		this.startDate = startDate;
 		this.endDate = endDate;
+		this.originalString="";
+		this.parsed=true;
 	}
 
 	public Medication() {
@@ -213,6 +233,8 @@ public class Medication {
 		this.provenance = "";
 		this.startDate = Medication.nullDate;
 		this.endDate = Medication.nullDate;
+		this.originalString="";
+		this.parsed=false;
 	}
 
 	public boolean isEmpty() {
@@ -235,7 +257,8 @@ public class Medication {
 		this.provenance = tokens[5];
 		this.setStartDate(tokens[6]);
 		this.setEndDate(tokens[7]);
-		
+		this.originalString=singleString;
+		this.parsed=true;
 	}
 
 	public boolean equals(Medication other) {

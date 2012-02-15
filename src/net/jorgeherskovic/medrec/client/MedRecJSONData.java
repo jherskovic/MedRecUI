@@ -45,6 +45,11 @@ public class MedRecJSONData extends Reconciliation {
 			e.printStackTrace();
 		}
 	}
+	
+	protected boolean readJSONFieldOrFalse(JSONObject obj, String fieldName) {
+		return obj.containsKey(fieldName) ? obj.get(fieldName).isBoolean()
+				.booleanValue() : false;
+	}
 
 	protected String readJSONFieldOrEmptyString(JSONObject obj, String fieldName) {
 		return obj.containsKey(fieldName) ? obj.get(fieldName).isString()
@@ -63,7 +68,15 @@ public class MedRecJSONData extends Reconciliation {
 		this_med.setProvenance(readJSONFieldOrEmptyString(JSONMed, "provenance"));
 		this_med.setStartDate(readJSONFieldOrEmptyString(JSONMed, "startDate"));
 		this_med.setEndDate(readJSONFieldOrEmptyString(JSONMed, "endDate"));
-
+		this_med.setOriginalString(readJSONFieldOrEmptyString(JSONMed, "original_string"));
+		// if the parsed field exists, set its value from the input object.
+		// Otherwise, set it to parsed=true if it has a medication name
+		if (JSONMed.containsKey("parsed")) {
+			this_med.setParsed(readJSONFieldOrFalse(JSONMed, "parsed"));
+		} else {
+			this_med.setParsed(this_med.getMedicationName().length() > 0);
+		}
+		
 		return this_med;
 	}
 

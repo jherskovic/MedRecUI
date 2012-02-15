@@ -17,7 +17,6 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalSplitPanel;
 
 /**
@@ -43,10 +42,10 @@ public class MedRec implements EntryPoint {
 		//rootPanel.setSize("800px", "600px");
 
 		final String[] consolidatedHeadings = new String[] { "&nbsp;",
-				"Origin", "Medication", "Dosage", "Freq.", "Start", "End",
+				"Origin", "Medication", "Dosage", "Sig", "Start", "End",
 				"Form", "Relation" };
 		final String[] reconciledHeadings = new String[] { "&nbsp;", "Origin",
-				"Medication", "Dosage", "Freq.", "Start", "End", "Form",
+				"Medication", "Dosage", "Sig", "Start", "End", "Form",
 				"Alerts" };
 
 		rootPanel.getElement().getStyle().setPosition(Position.RELATIVE); // Fix required for drag & drop
