@@ -64,7 +64,8 @@ public class ReconciledRenderer extends TableRenderer {
 		HTML handle = new HTML(this.dragToken);
 		t.setWidget(rownum, col++, handle);
 		t.getRowDragController().makeDraggable(handle);
-
+		
+		t.setHTML(rownum, col++, m.getProvenance());
 		t.setHTML(rownum, col++, m.getOriginalString());
 		
 		t.getRowFormatter().addStyleName(rownum, "SingleRowDesign");
@@ -73,7 +74,7 @@ public class ReconciledRenderer extends TableRenderer {
 		this.applyStyleArrayToRow(rownum, columnStyles);
 
 		// Merge all cells to the right of the single text row 
-		t.getFlexCellFormatter().setColSpan(rownum, col - 1, t.getCellCount(0) - 1);
+		t.getFlexCellFormatter().setColSpan(rownum, col - 1, t.getCellCount(0) - 2);
 		
 		return handle;
 	}
