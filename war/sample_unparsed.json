@@ -21,7 +21,7 @@
             ], 
             "med2": {
                 "normalized_dose": null, 
-                "provenance": "List 1", 
+                "provenance": "List 2", 
                 "formulation": "None", 
                 "units": "None", 
                 "parsed": false, 
@@ -57,7 +57,7 @@
             ], 
             "med2": {
                 "normalized_dose": null, 
-                "provenance": "List 1", 
+                "provenance": "List 2", 
                 "formulation": "", 
                 "units": "MG", 
                 "parsed": true, 
@@ -93,7 +93,7 @@
             ], 
             "med2": {
                 "normalized_dose": null, 
-                "provenance": "List 1", 
+                "provenance": "List 2", 
                 "formulation": "", 
                 "units": "MG", 
                 "parsed": true, 
@@ -129,7 +129,7 @@
             ], 
             "med2": {
                 "normalized_dose": null, 
-                "provenance": "List 1", 
+                "provenance": "List 2", 
                 "formulation": "", 
                 "units": "MCG", 
                 "parsed": true, 
@@ -165,7 +165,7 @@
             ], 
             "med2": {
                 "normalized_dose": null, 
-                "provenance": "List 1", 
+                "provenance": "List 2", 
                 "formulation": "None", 
                 "units": "None", 
                 "parsed": false, 

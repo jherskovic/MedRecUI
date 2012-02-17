@@ -109,9 +109,16 @@ public class ConsolidatedRenderer extends TableRenderer {
 		t.setHTML(rownum, col++, m.getProvenance());
 		t.setHTML(rownum, col++, m.getOriginalString());
 		
-		t.getRowFormatter().addStyleName(rownum, "SingleRowDesign");
-		t.getRowFormatter().addStyleName(rownum, "NoReconciliation");
-		this.applyStyleToAllCellsInRow(rownum, "SingleRowDesign");
+		String cellFormatStyle;
+		if (this_cons.length == 1) {
+			cellFormatStyle = "SingleRowDesign";
+		} else {
+			cellFormatStyle = "MultiRowTopDesign";
+		}
+		
+		t.getRowFormatter().addStyleName(rownum, getReconciliationStyle(this_cons));
+		
+		this.applyStyleToAllCellsInRow(rownum, cellFormatStyle);
 		this.applyStyleArrayToRow(rownum, columnStyles);
 		// Discover the width of the table headings
 		//int headerWidth=0;
@@ -121,7 +128,8 @@ public class ConsolidatedRenderer extends TableRenderer {
 		//}
 		
 		// Merge all cells to the right of the 
-		t.getFlexCellFormatter().setColSpan(rownum, col - 1, t.getCellCount(0) - 2);
+		t.getFlexCellFormatter().setColSpan(rownum, col - 1, t.getCellCount(0) - 3);
+		t.setHTML(rownum, col++, this_cons.getExplanation());
 		
 		return handle;
 	}
@@ -181,6 +189,7 @@ public class ConsolidatedRenderer extends TableRenderer {
 				}
 
 				col = 0;
+				
 				ArrayList<Integer> cells_to_squish = new ArrayList<Integer>();
 
 				HTML second_handle = new HTML();
@@ -203,74 +212,80 @@ public class ConsolidatedRenderer extends TableRenderer {
 					t.setHTML(currentRow, col++, m2.getProvenance());
 				}
 
-				if (m2.getMedicationName().equals(m1.getMedicationName())) {
+				if (m2.isParsed()) {
+					if (m2.getMedicationName().equals(m1.getMedicationName())) {
+						// t.addCell(currentRow);
+						// flattenCell(currentRow, col);
+						// makeCellDoubleHeight(t, currentRow - 1, col++);
+						cells_to_squish.add(col++);
+					} else {
+						t.setHTML(currentRow, col++, m2.getMedicationName());
+					}
+					String dosage2 = m2.getDose() + " " + m2.getUnits();
+					String dosage1 = m1.getDose() + " " + m1.getUnits();
+					if (dosage2.equals(dosage1)) {
+						// t.addCell(currentRow);
+						// flattenCell(currentRow, col);
+						// makeCellDoubleHeight(t, currentRow - 1, col++);
+						cells_to_squish.add(col++);
+					} else {
+						t.setHTML(currentRow, col++, dosage2);
+					}
+					if (m2.getInstructions().equals(m1.getInstructions())) {
+						// t.addCell(currentRow);
+						// flattenCell(currentRow, col);
+						// makeCellDoubleHeight(t, currentRow - 1, col++);
+						cells_to_squish.add(col++);
+					} else {
+						t.setHTML(currentRow, col++, m2.getInstructions());
+					}
+					if (m2.getStartDateString().equals(m1.getStartDateString())) {
+						// t.addCell(currentRow);
+						// flattenCell(currentRow, col);
+						// makeCellDoubleHeight(t, currentRow - 1, col++);
+						cells_to_squish.add(col++);
+					} else {
+						t.setHTML(currentRow, col++, m2.getStartDateString());
+					}
+					if (m2.getEndDateString().equals(m1.getEndDateString())) {
+						// t.addCell(currentRow);
+						// flattenCell(currentRow, col);
+						// makeCellDoubleHeight(t, currentRow - 1, col++);
+						cells_to_squish.add(col++);
+					} else {
+						t.setHTML(currentRow, col++, m2.getEndDateString());
+					}
+					if (m2.getFormulation().equals(m1.getFormulation())) {
+						// t.addCell(currentRow);
+						// flattenCell(currentRow, col);
+						// makeCellDoubleHeight(t, currentRow - 1, col++);
+						cells_to_squish.add(col++);
+					} else {
+						t.setHTML(currentRow, col++, m2.getFormulation());
+					}
+					// cells_to_squish.add(col);
+					// t.setText(currentRow, col++, this_cons.getExplanation());
 					// t.addCell(currentRow);
-					// flattenCell(currentRow, col);
-					// makeCellDoubleHeight(t, currentRow - 1, col++);
 					cells_to_squish.add(col++);
+					// makeCellDoubleHeight(t, currentRow - 1, col++); // Make
+					// explanation
+					// double height
 				} else {
-					t.setHTML(currentRow, col++, m2.getMedicationName());
-				}
-
-				String dosage2 = m2.getDose() + " " + m2.getUnits();
-				String dosage1 = m1.getDose() + " " + m1.getUnits();
-				if (dosage2.equals(dosage1)) {
-					// t.addCell(currentRow);
-					// flattenCell(currentRow, col);
-					// makeCellDoubleHeight(t, currentRow - 1, col++);
+					// Not parsed
+					if (m2.getOriginalString().equals(m1.getOriginalString())) {
+						// t.addCell(currentRow);
+						// flattenCell(currentRow, col);
+						// makeCellDoubleHeight(t, currentRow - 1, col++);
+						cells_to_squish.add(col++);
+					} else {
+						t.setHTML(currentRow, col++, m2.getOriginalString());
+					}
+					t.getFlexCellFormatter().setColSpan(currentRow, col - 1, t.getCellCount(0) - 3);
 					cells_to_squish.add(col++);
-				} else {
-					t.setHTML(currentRow, col++, dosage2);
 				}
-
-				if (m2.getInstructions().equals(m1.getInstructions())) {
-					// t.addCell(currentRow);
-					// flattenCell(currentRow, col);
-					// makeCellDoubleHeight(t, currentRow - 1, col++);
-					cells_to_squish.add(col++);
-				} else {
-					t.setHTML(currentRow, col++, m2.getInstructions());
-				}
-
-				if (m2.getStartDateString().equals(m1.getStartDateString())) {
-					// t.addCell(currentRow);
-					// flattenCell(currentRow, col);
-					// makeCellDoubleHeight(t, currentRow - 1, col++);
-					cells_to_squish.add(col++);
-				} else {
-					t.setHTML(currentRow, col++, m2.getStartDateString());
-				}
-
-				if (m2.getEndDateString().equals(m1.getEndDateString())) {
-					// t.addCell(currentRow);
-					// flattenCell(currentRow, col);
-					// makeCellDoubleHeight(t, currentRow - 1, col++);
-					cells_to_squish.add(col++);
-				} else {
-					t.setHTML(currentRow, col++, m2.getEndDateString());
-				}
-
-				if (m2.getFormulation().equals(m1.getFormulation())) {
-					// t.addCell(currentRow);
-					// flattenCell(currentRow, col);
-					// makeCellDoubleHeight(t, currentRow - 1, col++);
-					cells_to_squish.add(col++);
-				} else {
-					t.setHTML(currentRow, col++, m2.getFormulation());
-				}
-
-				// cells_to_squish.add(col);
-				// t.setText(currentRow, col++, this_cons.getExplanation());
-				// t.addCell(currentRow);
-				cells_to_squish.add(col++);
-				// makeCellDoubleHeight(t, currentRow - 1, col++); // Make
-				// explanation
-				// double height
-
 				t.getRowFormatter().addStyleName(currentRow,
 						"MultiRowBottomDesign");
 				t.getRowFormatter().addStyleName(currentRow, thisStyle);
-
 				rowMapping.put(second_handle, reverse_cons);
 
 				/*
