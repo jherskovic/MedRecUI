@@ -19,6 +19,7 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
+import com.google.gwt.cell.client.EditTextCell;
 
 public class ConsolidatedRenderer extends TableRenderer {
 	private static String[] columnStyles = { "DragHandle", "Origin",
