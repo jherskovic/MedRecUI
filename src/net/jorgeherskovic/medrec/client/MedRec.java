@@ -40,9 +40,7 @@ public class MedRec implements EntryPoint {
 	private final SimpleEventBus bus = new SimpleEventBus();
 
 	public void onModuleLoad() {
-		// TODO Auto-generated method stub
 		final RootPanel rootPanel = RootPanel.get("insert_app_here");
-		//rootPanel.setSize("800px", "600px");
 
 		final String[] consolidatedHeadings = new String[] { "&nbsp;",
 				"Origin", "Medication", "Dosage", "Sig", "Start", "End",
@@ -56,36 +54,8 @@ public class MedRec implements EntryPoint {
 		final AbsolutePanel absolutePanel = new AbsolutePanel();
 		
 		rootPanel.add(absolutePanel);
-		//absolutePanel.setSize("800px", "600px");
 		FlexTableRowDragController row_dc = new FlexTableRowDragController(
 				absolutePanel);
-
-//		final VerticalSplitPanel vsPanel = new VerticalSplitPanel();
-//		absolutePanel.add(vsPanel);
-//		vsPanel.setSize("800px", "600px");
-
-//		final AbsolutePanel absolutePanel_1 = new AbsolutePanel();
-//		absolutePanel_1.setStyleName("provenance");
-//		// absolutePanel.add(absolutePanel_1, 0, 0);
-//		absolutePanel_1.setSize("800px", "52px");
-//
-//		Label lblNewLabel = new Label("List 1 comes from");
-//		absolutePanel_1.add(lblNewLabel, 10, 0);
-//
-//		TextBox list1origin = new TextBox();
-//		absolutePanel_1.add(list1origin, 10, 18);
-//		list1origin.setSize("291px", "18px");
-//
-//		Label lblListComes = new Label("List 2 comes from");
-//		absolutePanel_1.add(lblListComes, 489, 0);
-//		lblListComes.setSize("105px", "18px");
-//
-//		TextBox list2origin = new TextBox();
-//		absolutePanel_1.add(list2origin, 489, 18);
-//		list2origin.setSize("291px", "18px");
-//
-//		vsPanel.setTopWidget(absolutePanel_1);
-//		vsPanel.setSplitPosition("52px");
 
 		final VerticalSplitPanel rest = new VerticalSplitPanel();
 		rest.setSize("800px", "600px");
@@ -130,7 +100,6 @@ public class MedRec implements EntryPoint {
 		btnDone.setSize("53px", "30px");
 
 		final AbsolutePanel reconciledPanel = new AbsolutePanel();
-		// absolutePanel.add(reconciledPanel, 0, 316);
 		reconciledPanel.setSize("800px", "252px");
 		rest_of_rest.add(reconciledPanel);
 
@@ -165,9 +134,6 @@ public class MedRec implements EntryPoint {
 				rootPanel.setWidth(new_width);
 				absolutePanel.setHeight(height+"px");
 				absolutePanel.setWidth(new_width);
-//				vsPanel.setHeight(height+"px");
-//				vsPanel.setWidth(new_width);
-//				absolutePanel_1.setWidth(new_width);
 				rest.setWidth(new_width);
 				rest.setHeight((height)+"px");
 				rest_of_rest.setWidth(new_width);

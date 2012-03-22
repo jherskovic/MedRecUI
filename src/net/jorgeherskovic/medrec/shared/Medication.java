@@ -3,7 +3,7 @@
  */
 package net.jorgeherskovic.medrec.shared;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.shared.DateTimeFormat;
 import java.util.Date;
 
 /**
@@ -24,7 +24,7 @@ public class Medication {
 	static Date nullDate = new Date(0);
 	static DateTimeFormat myDTFormat = DateTimeFormat.getFormat("yyyy.MM.dd");
 	static DateTimeFormat myOutputFormat = DateTimeFormat
-			.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT);
+			.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM);
 
 	/**
 	 * @return the provenance
