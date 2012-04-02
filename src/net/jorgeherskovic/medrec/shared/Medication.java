@@ -11,26 +11,24 @@ import java.util.Date;
  * 
  */
 public class Medication {
-	private String medicationName;
-	private String dose;
-	private String units;
-	private String formulation;
-	private String instructions;
-	private Date startDate;
-	private Date endDate;
+	private EditableStringField medicationName;
+	private EditableStringField dose;
+	private EditableStringField units;
+	private EditableCompoundField doseAndUnits;
+	private EditableStringField formulation;
+	private EditableStringField instructions;
+	private EditableDateField startDate;
+	private EditableDateField endDate;
 	private boolean parsed;
-	private String provenance;
+	private EditableStringField provenance;
 	private String originalString;
-	static Date nullDate = new Date(0);
-	static DateTimeFormat myDTFormat = DateTimeFormat.getFormat("yyyy.MM.dd");
-	static DateTimeFormat myOutputFormat = DateTimeFormat
-			.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM);
-
+	static final Date nullDate = new Date(0);
+	
 	/**
 	 * @return the provenance
 	 */
 	public String getProvenance() {
-		return provenance;
+		return provenance.getValue();
 	}
 
 	/**
@@ -38,29 +36,37 @@ public class Medication {
 	 *            the provenance to set
 	 */
 	public void setProvenance(String provenance) {
-		this.provenance = provenance;
+		this.provenance.setValue(provenance);
 	}
 
+	public EditableStringField getProvenanceField() {
+		return provenance;
+	}
+	
 	/**
 	 * @return the medicationName
 	 */
 	public String getMedicationName() {
-		return medicationName;
+		return medicationName.getValue();
 	}
 
+	public EditableStringField getMedicationNameField() {
+		return medicationName;
+	}
+	
 	/**
 	 * @param medicationName
 	 *            the medicationName to set
 	 */
 	public void setMedicationName(String medicationName) {
-		this.medicationName = medicationName;
+		this.medicationName.setValue(medicationName);
 	}
 
 	/**
 	 * @return the dose
 	 */
 	public String getDose() {
-		return dose;
+		return dose.getValue();
 	}
 
 	/**
@@ -68,14 +74,18 @@ public class Medication {
 	 *            the dose to set
 	 */
 	public void setDose(String dose) {
-		this.dose = toProperCase(dose);
+		this.dose.setValue(toProperCase(dose));
 	}
 
+	public EditableStringField getDoseField() {
+		return dose;
+	}
+	
 	/**
 	 * @return the units
 	 */
 	public String getUnits() {
-		return units;
+		return units.getValue();
 	}
 
 	/**
@@ -83,14 +93,26 @@ public class Medication {
 	 *            the units to set
 	 */
 	public void setUnits(String units) {
-		this.units = units;
+		this.units.setValue(units);
 	}
 
+	public EditableStringField getUnitsField() {
+		return units;
+	}
+	
+	public EditableCompoundField getDoseAndUnitsField() {
+		return doseAndUnits;
+	}
+	
+	public String getDoseAndUnits() {
+		return doseAndUnits.getStringValue();
+	}
+	
 	/**
 	 * @return the formulation
 	 */
 	public String getFormulation() {
-		return formulation;
+		return formulation.getValue();
 	}
 
 	/**
@@ -98,14 +120,18 @@ public class Medication {
 	 *            the formulation to set
 	 */
 	public void setFormulation(String formulation) {
-		this.formulation = toProperCase(formulation);
+		this.formulation.setValue(toProperCase(formulation));
+	}
+	
+	public EditableStringField getFormulationField() {
+		return formulation;
 	}
 
 	/**
 	 * @return the instructions
 	 */
 	public String getInstructions() {
-		return instructions;
+		return instructions.getValue();
 	}
 
 	/**
@@ -113,14 +139,18 @@ public class Medication {
 	 *            the instructions to set
 	 */
 	public void setInstructions(String instructions) {
-		this.instructions = toProperCase(instructions);
+		this.instructions.setValue(toProperCase(instructions));
 	}
 
+	public EditableStringField getInstructionsField() {
+		return instructions;
+	}
+	
 	/**
 	 * @return the startDate
 	 */
 	public Date getStartDate() {
-		return startDate;
+		return startDate.getValue();
 	}
 
 	/**
@@ -128,23 +158,18 @@ public class Medication {
 	 *            the startDate to set
 	 */
 	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
+		this.startDate.setValue(startDate);
 	}
 
 	public void setStartDate(String startDate) {
-		try {
-			this.startDate = myDTFormat.parse(startDate);
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			this.startDate = Medication.nullDate;
-		}
+		this.startDate.setValue(startDate);
 	}
 	
 	/**
 	 * @return the endDate
 	 */
 	public Date getEndDate() {
-		return endDate;
+		return endDate.getValue();
 	}
 
 	/**
@@ -152,32 +177,27 @@ public class Medication {
 	 *            the endDate to set
 	 */
 	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+		this.endDate.setValue(endDate);
 	}
 
 	public void setEndDate(String endDate) {
-		try {
-			this.endDate = myDTFormat.parse(endDate);
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			this.endDate = Medication.nullDate;
-		}
+		this.endDate.setValue(endDate);
 	}
 	
 	public String getStartDateString() {
-		if (startDate.equals(Medication.nullDate)) {
-			return "";
-		}
-
-		return myOutputFormat.format(startDate);
+		return startDate.getStringValue();
 	}
 
 	public String getEndDateString() {
-		if (endDate.equals(Medication.nullDate)) {
-			return "";
-		}
-
-		return myOutputFormat.format(endDate);
+		return endDate.getStringValue();
+	}
+	
+	public EditableDateField getStartDateField() {
+		return startDate;
+	}
+	
+	public EditableDateField getEndDateField() {
+		return endDate;
 	}
 	
 	public String getOriginalString() {
@@ -207,34 +227,45 @@ public class Medication {
 		  return new String(charArray);
 		}
 	
+	private void setupDoseAndUnits() {
+		EditableStringField[] d_u = new EditableStringField[2];
+		d_u[0]=this.dose;
+		d_u[1]=this.units;
+		this.doseAndUnits = new EditableCompoundField(d_u);
+	}
+	
 	public Medication(String medicationName, String dose, String units,
 			String formulation, String instructions, String provenance,
 			Date startDate, Date endDate) {
 		super();
-		this.medicationName = toProperCase(medicationName);
-		this.dose = toProperCase(dose);
-		this.units = toProperCase(units);
-		this.formulation = toProperCase(formulation);
-		this.instructions = toProperCase(instructions);
-		this.provenance = provenance;
-		this.startDate = startDate;
-		this.endDate = endDate;
+		this.medicationName = new EditableStringField(toProperCase(medicationName));
+		this.dose = new EditableStringField(toProperCase(dose));
+		this.units = new EditableStringField(toProperCase(units));
+		this.formulation = new EditableStringField(toProperCase(formulation));
+		this.instructions = new EditableStringField(toProperCase(instructions));
+		this.provenance = new EditableStringField(provenance);
+		this.startDate = new EditableDateField(startDate);
+		this.endDate = new EditableDateField(endDate);
 		this.originalString="";
 		this.parsed=true;
+		
+		setupDoseAndUnits();
 	}
 
 	public Medication() {
 		super();
-		this.medicationName = "";
-		this.dose = "";
-		this.units = "";
-		this.formulation = "";
-		this.instructions = "";
-		this.provenance = "";
-		this.startDate = Medication.nullDate;
-		this.endDate = Medication.nullDate;
+		this.medicationName = new EditableStringField();
+		this.dose = new EditableStringField();
+		this.units = new EditableStringField();
+		this.formulation = new EditableStringField();
+		this.instructions = new EditableStringField();
+		this.provenance = new EditableStringField();
+		this.startDate = new EditableDateField();
+		this.endDate = new EditableDateField();
 		this.originalString="";
 		this.parsed=false;
+		
+		setupDoseAndUnits();
 	}
 
 	public boolean isEmpty() {
@@ -249,16 +280,18 @@ public class Medication {
 	 */
 	public Medication(String singleString) {
 		String[] tokens = singleString.split("[|]");
-		this.medicationName = tokens[0];
-		this.dose = tokens[1];
-		this.units = tokens[2];
-		this.formulation = tokens[3];
-		this.instructions = tokens[4];
-		this.provenance = tokens[5];
-		this.setStartDate(tokens[6]);
-		this.setEndDate(tokens[7]);
+		this.medicationName = new EditableStringField(tokens[0]);
+		this.dose = new EditableStringField(tokens[1]);
+		this.units = new EditableStringField(tokens[2]);
+		this.formulation = new EditableStringField(tokens[3]);
+		this.instructions = new EditableStringField(tokens[4]);
+		this.provenance = new EditableStringField(tokens[5]);
+		this.startDate = new EditableDateField(tokens[6]);
+		this.endDate = new EditableDateField(tokens[7]);
 		this.originalString=singleString;
 		this.parsed=true;
+		
+		setupDoseAndUnits();
 	}
 
 	public boolean equals(Medication other) {

@@ -44,12 +44,12 @@ public class ReconciledRenderer extends TableRenderer {
 //		t.setHTML(rownum, col++, m.getEndDateString());
 //		t.setHTML(rownum, col++, m.getFormulation());
 //		t.setWidget(rownum, col++, new EditableLabel(m.getProvenance()));
-		t.setWidget(rownum, col++, new EditableLabel(m.getMedicationName()));
-		t.setWidget(rownum, col++, new EditableLabel(m.getDose() + " " + m.getUnits()));
-		t.setWidget(rownum, col++, new EditableLabel(m.getInstructions()));
-		t.setWidget(rownum, col++, new EditableLabel(m.getStartDateString()));
-		t.setWidget(rownum, col++, new EditableLabel(m.getEndDateString()));
-		t.setWidget(rownum, col++, new EditableLabel(m.getFormulation()));
+		t.setWidget(rownum, col++, new EditableLabel(m.getMedicationName(), m.getMedicationNameField()));
+		t.setWidget(rownum, col++, new EditableLabel(m.getDoseAndUnits(), m.getDoseAndUnitsField()));
+		t.setWidget(rownum, col++, new EditableLabel(m.getInstructions(), m.getInstructionsField()));
+		t.setWidget(rownum, col++, new EditableLabel(m.getStartDateString(), m.getStartDateField()));
+		t.setWidget(rownum, col++, new EditableLabel(m.getEndDateString(), m.getEndDateField()));
+		t.setWidget(rownum, col++, new EditableLabel(m.getFormulation(), m.getFormulationField()));
 		t.setText(rownum, col++, "");
 
 		t.getRowFormatter().addStyleName(rownum, "SingleRowDesign");

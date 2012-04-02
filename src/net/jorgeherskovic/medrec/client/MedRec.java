@@ -68,6 +68,7 @@ public class MedRec implements EntryPoint {
 		// absolutePanel.add(consolidatedPanel, 0, 58);
 		consolidatedPanel.setSize("800px", "252px");
 		rest_of_rest.setTopWidget(consolidatedPanel);
+		rest_of_rest.setSplitPosition("278px");
 		rest.setTopWidget(rest_of_rest);
 
 		final DockPanel dockPanel = new DockPanel();

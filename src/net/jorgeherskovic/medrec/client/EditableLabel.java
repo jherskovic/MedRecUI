@@ -3,6 +3,8 @@
  */
 package net.jorgeherskovic.medrec.client;
 
+import net.jorgeherskovic.medrec.shared.EditableField;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -36,6 +38,8 @@ public class EditableLabel extends Composite implements HasValueChangeHandlers<S
 	private static EditableLabelUiBinder uiBinder = GWT
 			.create(EditableLabelUiBinder.class);
 
+	private EditableField<?> boundField;
+	
 	interface EditableLabelUiBinder extends UiBinder<Widget, EditableLabel> {
 	}
 
@@ -63,10 +67,12 @@ public class EditableLabel extends Composite implements HasValueChangeHandlers<S
 	 * Note that depending on the widget that is used, it may be necessary to
 	 * implement HasHTML instead of HasText.
 	 */
-	public EditableLabel() {
+	public EditableLabel(EditableField<?> f) {
 		initWidget(uiBinder.createAndBindUi(this));
 		deckPanel.showWidget(0);
 
+		boundField=f;
+		
 		focusPanel.addFocusHandler(new FocusHandler() {
 			//@Override
 			public void onFocus(FocusEvent event) {
@@ -100,11 +106,11 @@ public class EditableLabel extends Composite implements HasValueChangeHandlers<S
 				}
 			}
 		});
-
+		
 	}
 
-	public EditableLabel(String lbl) {
-		this();
+	public EditableLabel(String lbl, EditableField<?> f) {
+		this(f);
 		this.setValue(lbl);
 	}
 
@@ -132,6 +138,7 @@ public class EditableLabel extends Composite implements HasValueChangeHandlers<S
 
 	public void setValue(String value) {
 		editLabel.setText(value);
+		boundField.setValue(value);
 		editBox.setText(value);
 	}
 
