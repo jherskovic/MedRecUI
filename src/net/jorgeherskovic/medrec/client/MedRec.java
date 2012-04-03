@@ -1,12 +1,18 @@
 package net.jorgeherskovic.medrec.client;
 
+import org.adamtacy.client.ui.effects.impl.Fade;
+
 import net.jorgeherskovic.medrec.client.event.FinishedLoadingEvent;
+import net.jorgeherskovic.medrec.client.event.FinishedPostingEvent;
+import net.jorgeherskovic.medrec.client.event.FinishedPostingEventHandler;
 import net.jorgeherskovic.medrec.client.event.RedrawEvent;
 import net.jorgeherskovic.medrec.client.event.FinishedLoadingEventHandler;
 import net.jorgeherskovic.medrec.shared.Reconciliation;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -14,9 +20,11 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalSplitPanel;
 
 /**
@@ -38,6 +46,7 @@ public class MedRec implements EntryPoint {
 
 	public void onModuleLoad() {
 		final String JSON_URL;
+		final String RESPONSE_URL;
 		
 		//private static final String JSON_URL = "sample.json";
 		if (Window.Location.getParameterMap().containsKey("json_src"))
@@ -47,6 +56,14 @@ public class MedRec implements EntryPoint {
 			JSON_URL = "sample.json";	
 		};
 
+		if (Window.Location.getParameterMap().containsKey("response"))
+		{
+			RESPONSE_URL=Window.Location.getParameter("response");
+		} else
+		{
+			RESPONSE_URL="fake_response_url";
+		}
+		
 		final RootPanel rootPanel = RootPanel.get("insert_app_here");
 
 		final String[] consolidatedHeadings = new String[] { "&nbsp;",
@@ -96,16 +113,12 @@ public class MedRec implements EntryPoint {
 		FlexTableRowDropController ct_dc = new FlexTableRowDropController(
 				consolidatedTable, this.bus);
 		@SuppressWarnings("unused")
-		ConsolidatedRenderer conRenderer = new ConsolidatedRenderer(
+		final ConsolidatedRenderer conRenderer = new ConsolidatedRenderer(
 				consolidatedTable, consolidatedHeadings, bus);
 
 		final AbsolutePanel bottomPanel = new AbsolutePanel();
 		bottomPanel.setSize("800px", "30px");
 		rest.setBottomWidget(bottomPanel);
-
-		final Button btnDone = new Button("Done");
-		bottomPanel.add(btnDone, 737, 0);
-		btnDone.setSize("53px", "30px");
 
 		final AbsolutePanel reconciledPanel = new AbsolutePanel();
 		reconciledPanel.setSize("800px", "252px");
@@ -129,10 +142,13 @@ public class MedRec implements EntryPoint {
 		FlexTableRowDropController rc_dc = new FlexTableRowDropController(
 				reconciledTable, bus);
 
-		@SuppressWarnings("unused")
-		ReconciledRenderer recRenderer = new ReconciledRenderer(
+		final ReconciledRenderer recRenderer = new ReconciledRenderer(
 				reconciledTable, reconciledHeadings, bus);
 
+		final Button btnDone = new Button("Done");
+		bottomPanel.add(btnDone, 737, 0);
+		btnDone.setSize("53px", "30px");
+	 
 		/* Resize behavior */
 		final UIResizer resizer=new UIResizer() {
 			public void resizeUI(int width, int height) {
@@ -196,6 +212,24 @@ public class MedRec implements EntryPoint {
 		this.myData = new MedRecJSONData(JSON_URL, bus);
 		//this.myData = new SampleData();
 		//this.bus.fireEvent(new FinishedLoadingEvent());
+
+		btnDone.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				//rootPanel.setVisible(false);
+				Fade f=new Fade(rootPanel.getElement());
+				new MedRecResponseSender(RESPONSE_URL, recRenderer.toJSON(), bus);
+				//RootPanel.get("insert_results_here").add(new HTML(recRenderer.toJSON()));
+				f.play();
+			}
+		});
+		
+		bus.addHandler(FinishedPostingEvent.TYPE, new FinishedPostingEventHandler() {
+			@Override
+			public void onFinishedPosting(FinishedPostingEvent event) {
+				RootPanel.get("insert_results_here").add(new Label("Done."));
+			}
+		});
 	}
 
 }

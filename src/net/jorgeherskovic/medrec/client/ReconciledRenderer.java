@@ -169,4 +169,21 @@ public class ReconciledRenderer extends TableRenderer {
 		bus.fireEvent(new RedrawEvent());
 	}
 
+	public String toJSON() {
+		StringBuffer output=new StringBuffer();
+		output.append("[");
+		List<Consolidation> meds = getAttachedTable().getMedList();
+		
+		for (int i = 0; i < meds.size(); i++) {
+			Medication m = meds.get(i).getSelectedMedication();
+			output.append(m.toJSON());
+			// Don't insert a comma and newline after the last medication 
+			if (i < meds.size() - 1) {
+				output.append(",\n");
+			}
+		}	
+		output.append("\n]\n");
+		
+		return output.toString();
+	}
 }

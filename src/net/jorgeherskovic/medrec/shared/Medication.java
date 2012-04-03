@@ -302,4 +302,30 @@ public class Medication {
 				&& other.getInstructions() == this.getInstructions());
 	}
 
+	public String toJSON() {
+		StringBuffer output=new StringBuffer();
+		output.append("{\n\t\"medicationName\": \"");
+		output.append(this.getMedicationName());
+		output.append("\",\n");
+		output.append("\t\"dose\": \"");
+		output.append(this.getDose());
+		output.append("\",\n");
+		output.append("\t\"units\": \"");
+		output.append(this.getUnits());
+		output.append("\",\n");
+		output.append("\t\"formulation\": \"");
+		output.append(this.getFormulation());
+		output.append("\",\n");
+		output.append("\t\"instructions\": \"");
+		output.append(this.getInstructions());
+		output.append("\",\n");
+		output.append("\t\"parsed\": \"");
+		if (this.isParsed()) {
+			output.append("true\"");
+		} else {
+			output.append("false\"");
+		}
+		output.append("\n}\n");
+		return output.toString();
+	}
 }
