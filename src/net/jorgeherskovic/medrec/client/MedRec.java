@@ -32,14 +32,21 @@ public class MedRec implements EntryPoint {
 	/**
 	 * This is the entry point method.
 	 */
-
-	//private static final String JSON_URL = "sample.json";
-	private static final String JSON_URL=Window.Location.getParameter("json_src");
 	
 	private Reconciliation myData;
 	private final SimpleEventBus bus = new SimpleEventBus();
 
 	public void onModuleLoad() {
+		final String JSON_URL;
+		
+		//private static final String JSON_URL = "sample.json";
+		if (Window.Location.getParameterMap().containsKey("json_src"))
+		{
+			JSON_URL=Window.Location.getParameter("json_src");
+		} else {
+			JSON_URL = "sample.json";	
+		};
+
 		final RootPanel rootPanel = RootPanel.get("insert_app_here");
 
 		final String[] consolidatedHeadings = new String[] { "&nbsp;",

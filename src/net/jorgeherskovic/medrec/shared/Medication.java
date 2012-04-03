@@ -269,8 +269,8 @@ public class Medication {
 	}
 
 	public boolean isEmpty() {
-		return medicationName.equals("") & dose.equals("")
-				& formulation.equals("") & instructions.equals("");
+		return medicationName.getStringValue().equals("") & dose.getStringValue().equals("")
+				& formulation.getStringValue().equals("") & instructions.getStringValue().equals("");
 	}
 
 	/**

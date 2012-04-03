@@ -222,8 +222,8 @@ public class ConsolidatedRenderer extends TableRenderer {
 					} else {
 						t.setHTML(currentRow, col++, m2.getMedicationName());
 					}
-					String dosage2 = m2.getDose() + " " + m2.getUnits();
-					String dosage1 = m1.getDose() + " " + m1.getUnits();
+					String dosage2 = m2.getDoseAndUnits();
+					String dosage1 = m1.getDoseAndUnits();
 					if (dosage2.equals(dosage1)) {
 						// t.addCell(currentRow);
 						// flattenCell(currentRow, col);
