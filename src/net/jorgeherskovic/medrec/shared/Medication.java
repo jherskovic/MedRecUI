@@ -3,7 +3,6 @@
  */
 package net.jorgeherskovic.medrec.shared;
 
-import com.google.gwt.i18n.shared.DateTimeFormat;
 import java.util.Date;
 
 /**
