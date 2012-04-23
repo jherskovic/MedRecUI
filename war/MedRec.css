@@ -18,9 +18,8 @@ h1 {
 	
 }
 
-.sendButton {
-	display: block;
-	font-size: 16pt;
+.doneButton {
+	font-family: 'Open Sans', verdana, sans-serif;
 }
 
 /** Most GWT widgets already have a style name defined */

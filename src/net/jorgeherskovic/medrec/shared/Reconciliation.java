@@ -23,4 +23,8 @@ public abstract class Reconciliation {
 	public ArrayList<ReconciledMedication> getReconciledMeds() {
 		return this.reconciledMeds;
 	}
+	
+	public String[] getOriginalList(int list_number) {
+		return originalLists.get(list_number);
+	}
 }

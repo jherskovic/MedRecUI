@@ -1,7 +1,11 @@
 package net.jorgeherskovic.medrec.client;
 
+import org.adamtacy.client.ui.effects.events.EffectCompletedEvent;
+import org.adamtacy.client.ui.effects.events.EffectCompletedHandler;
 import org.adamtacy.client.ui.effects.impl.Fade;
 
+import net.jorgeherskovic.medrec.client.event.DoneReviewingListsEvent;
+import net.jorgeherskovic.medrec.client.event.DoneReviewingListsEventHandler;
 import net.jorgeherskovic.medrec.client.event.FinishedLoadingEvent;
 import net.jorgeherskovic.medrec.client.event.FinishedPostingEvent;
 import net.jorgeherskovic.medrec.client.event.FinishedPostingEventHandler;
@@ -75,7 +79,7 @@ public class MedRec implements EntryPoint {
 		
 		final AbsolutePanel absolutePanel = new AbsolutePanel();
 		
-		rootPanel.add(absolutePanel);
+		//rootPanel.add(absolutePanel);
 		FlexTableRowDragController row_dc = new FlexTableRowDragController(
 				absolutePanel);
 
@@ -98,11 +102,11 @@ public class MedRec implements EntryPoint {
 		consolidatedPanel.add(dockPanel, 0, 0);
 		dockPanel.setSize("800px", "252px");
 
-		Label lblConsolidatedRecord = new Label("Unreconciled Record");
-		lblConsolidatedRecord.setStyleName("big-label");
-		lblConsolidatedRecord
+		Label lblTopPanel = new Label("Unreconciled Record");
+		lblTopPanel.setStyleName("big-label");
+		lblTopPanel
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		dockPanel.add(lblConsolidatedRecord, DockPanel.NORTH);
+		dockPanel.add(lblTopPanel, DockPanel.NORTH);
 
 		final DraggableFlexTable consolidatedTable = new DraggableFlexTable(
 				row_dc, null);
@@ -127,11 +131,11 @@ public class MedRec implements EntryPoint {
 		reconciledPanel.add(dockPanel_1, 0, 0);
 		dockPanel_1.setSize("800px", "252px");
 
-		Label lblReconciledRecord = new Label("Reconciled Record");
-		lblReconciledRecord.setStyleName("big-label");
-		lblReconciledRecord
+		Label lblBottomPanel = new Label("Reconciled Record");
+		lblBottomPanel.setStyleName("big-label");
+		lblBottomPanel
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		dockPanel_1.add(lblReconciledRecord, DockPanel.NORTH);
+		dockPanel_1.add(lblBottomPanel, DockPanel.NORTH);
 
 		final DraggableFlexTable reconciledTable = new DraggableFlexTable(
 				row_dc, null);
@@ -144,6 +148,7 @@ public class MedRec implements EntryPoint {
 				reconciledTable, reconciledHeadings, bus);
 
 		final Button btnDone = new Button("Done");
+		btnDone.setStyleName("doneButton");
 		bottomPanel.add(btnDone, 737, 0);
 		btnDone.setSize("53px", "30px");
 	 
@@ -228,6 +233,15 @@ public class MedRec implements EntryPoint {
 				RootPanel.get("insert_results_here").add(new Label("Done."));
 			}
 		});
-	}
 
+		bus.addHandler(DoneReviewingListsEvent.TYPE, new DoneReviewingListsEventHandler() {
+			@Override
+			public void onDoneReviewingLists(DoneReviewingListsEvent event) {
+				rootPanel.add(absolutePanel);
+			}
+			
+		});
+		
+		final ReviewLists reviewListsForm=new ReviewLists(rootPanel, bus, myData);
+	}
 }
