@@ -14,6 +14,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -47,13 +48,15 @@ public class ReviewLists {
 		myWindow.add(allPanel, 0, 0);
 		allPanel.setSize("800px", "600px");
 		
-		VerticalSplitPanel rest = new VerticalSplitPanel();
-		rest.setSplitPosition("50%");
+		//VerticalSplitPanel rest = new VerticalSplitPanel();
+		DockPanel rest = new DockPanel();
+		//rest.setSplitPosition("50%");
 		allPanel.setTopWidget(rest);
-		rest.setSize("100%", "100%");
+		//rest.setSize("100%", "100%");
 		
 		DockPanel list1 = new DockPanel();
-		rest.setTopWidget(list1);
+		//rest.setTopWidget(list1);
+		rest.add(list1, DockPanel.NORTH);
 		list1.setSize("100%", "100%");
 		
 		Label lblList1 = new Label("List 1");
@@ -65,7 +68,8 @@ public class ReviewLists {
 		list1.add(tblList1, DockPanel.CENTER);
 		
 		DockPanel list2 = new DockPanel();
-		rest.setBottomWidget(list2);
+		//rest.setBottomWidget(list2);
+		rest.add(list2, DockPanel.SOUTH);
 		list2.setSize("100%", "100%");
 		
 		Label lblList2 = new Label("List 2");
