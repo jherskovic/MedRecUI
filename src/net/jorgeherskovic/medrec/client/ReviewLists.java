@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalSplitPanel;
 
@@ -38,10 +39,10 @@ public class ReviewLists {
 		}
 	}
 	
-	public ReviewLists(RootPanel panelToAttachTo, final SimpleEventBus bus, final Reconciliation data) {
+	public ReviewLists(RootLayoutPanel rootPanel, final SimpleEventBus bus, final Reconciliation data) {
 		final AbsolutePanel myWindow=new AbsolutePanel();
 		myWindow.setSize("800px", "600px");
-		panelToAttachTo.add(myWindow);
+		rootPanel.add(myWindow);
 		
 		VerticalSplitPanel allPanel = new VerticalSplitPanel();
 		allPanel.setSplitPosition("557px");

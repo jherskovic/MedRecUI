@@ -15,6 +15,7 @@ import net.jorgeherskovic.medrec.shared.Reconciliation;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -23,10 +24,13 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalSplitPanel;
 
 /**
@@ -66,7 +70,7 @@ public class MedRec implements EntryPoint {
 			RESPONSE_URL="fake_response_url";
 		}
 		
-		final RootPanel rootPanel = RootPanel.get("insert_app_here");
+		final RootLayoutPanel rootPanel = RootLayoutPanel.get();
 
 		final String[] consolidatedHeadings = new String[] { "&nbsp;",
 				"Origin", "Medication", "Dosage", "Sig", "Start", "End",
@@ -83,22 +87,21 @@ public class MedRec implements EntryPoint {
 		FlexTableRowDragController row_dc = new FlexTableRowDragController(
 				absolutePanel);
 
-		final VerticalSplitPanel rest = new VerticalSplitPanel();
+		final SplitLayoutPanel rest = new SplitLayoutPanel();
 		rest.setSize("800px", "600px");
 		absolutePanel.add(rest);
-		rest.setSplitPosition("557px");
+		//rest.setSplitPosition("557px");
 
-		final VerticalSplitPanel rest_of_rest = new VerticalSplitPanel();
+		final SplitLayoutPanel rest_of_rest = new SplitLayoutPanel();
 		rest_of_rest.setSize("800px", "557px");
 		final AbsolutePanel consolidatedPanel = new AbsolutePanel();
 		// absolutePanel.add(consolidatedPanel, 0, 58);
 		consolidatedPanel.setSize("800px", "252px");
-		rest_of_rest.setTopWidget(consolidatedPanel);
-		rest_of_rest.setSplitPosition("278px");
-		rest.setTopWidget(rest_of_rest);
+		rest_of_rest.addNorth(consolidatedPanel, 252);
+		rest.addNorth(rest_of_rest, 557);
 
-		final DockPanel dockPanel = new DockPanel();
-		dockPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		final DockLayoutPanel dockPanel = new DockLayoutPanel(Unit.PX);
+		//dockPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		consolidatedPanel.add(dockPanel, 0, 0);
 		dockPanel.setSize("800px", "252px");
 
@@ -106,12 +109,12 @@ public class MedRec implements EntryPoint {
 		lblTopPanel.setStyleName("big-label");
 		lblTopPanel
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		dockPanel.add(lblTopPanel, DockPanel.NORTH);
+		dockPanel.addNorth(lblTopPanel, 30);
 
 		final DraggableFlexTable consolidatedTable = new DraggableFlexTable(
 				row_dc, null);
 		consolidatedTable.setStyleName("TableDesign");
-		dockPanel.add(consolidatedTable, DockPanel.NORTH);
+		dockPanel.addNorth(consolidatedTable, 252);
 		FlexTableRowDropController ct_dc = new FlexTableRowDropController(
 				consolidatedTable, this.bus);
 		@SuppressWarnings("unused")
@@ -120,14 +123,14 @@ public class MedRec implements EntryPoint {
 
 		final AbsolutePanel bottomPanel = new AbsolutePanel();
 		bottomPanel.setSize("800px", "30px");
-		rest.setBottomWidget(bottomPanel);
+		rest.addSouth(bottomPanel, 30);
 
 		final AbsolutePanel reconciledPanel = new AbsolutePanel();
 		reconciledPanel.setSize("800px", "252px");
 		rest_of_rest.add(reconciledPanel);
 
-		final DockPanel dockPanel_1 = new DockPanel();
-		dockPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		final DockLayoutPanel dockPanel_1 = new DockLayoutPanel(Unit.PX);
+		//dockPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		reconciledPanel.add(dockPanel_1, 0, 0);
 		dockPanel_1.setSize("800px", "252px");
 
@@ -135,12 +138,12 @@ public class MedRec implements EntryPoint {
 		lblBottomPanel.setStyleName("big-label");
 		lblBottomPanel
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		dockPanel_1.add(lblBottomPanel, DockPanel.NORTH);
+		dockPanel_1.addNorth(lblBottomPanel, 30);
 
 		final DraggableFlexTable reconciledTable = new DraggableFlexTable(
 				row_dc, null);
 		reconciledTable.setStyleName("TableDesign");
-		dockPanel_1.add(reconciledTable, DockPanel.CENTER);
+		dockPanel_1.add(reconciledTable);
 		FlexTableRowDropController rc_dc = new FlexTableRowDropController(
 				reconciledTable, bus);
 
