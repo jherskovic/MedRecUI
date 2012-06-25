@@ -59,15 +59,15 @@ public class MedRecJSONData extends Reconciliation {
 	protected Medication medFactory(JSONObject JSONMed) {
 		Medication this_med = new Medication();
 
-		this_med.setMedicationName(readJSONFieldOrEmptyString(JSONMed, "medicationName"));
+		this_med.setMedicationName(readJSONFieldOrEmptyString(JSONMed, "medication_name"));
 
 		this_med.setDose(readJSONFieldOrEmptyString(JSONMed, "dose"));
 		this_med.setFormulation(readJSONFieldOrEmptyString(JSONMed, "formulation"));
 		this_med.setUnits(readJSONFieldOrEmptyString(JSONMed, "units"));
 		this_med.setInstructions(readJSONFieldOrEmptyString(JSONMed, "instructions"));
 		this_med.setProvenance(readJSONFieldOrEmptyString(JSONMed, "provenance"));
-		this_med.setStartDate(readJSONFieldOrEmptyString(JSONMed, "startDate"));
-		this_med.setEndDate(readJSONFieldOrEmptyString(JSONMed, "endDate"));
+		this_med.setStartDate(readJSONFieldOrEmptyString(JSONMed, "start_date"));
+		this_med.setEndDate(readJSONFieldOrEmptyString(JSONMed, "end_date"));
 		this_med.setOriginalString(readJSONFieldOrEmptyString(JSONMed, "original_string"));
 		// if the parsed field exists, set its value from the input object.
 		// Otherwise, set it to parsed=true if it has a medication name
