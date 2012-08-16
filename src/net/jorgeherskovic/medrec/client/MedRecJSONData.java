@@ -59,7 +59,7 @@ public class MedRecJSONData extends Reconciliation {
 	protected Medication medFactory(JSONObject JSONMed) {
 		Medication this_med = new Medication();
 
-		this_med.setMedicationName(readJSONFieldOrEmptyString(JSONMed, "medicationName"));
+		this_med.setMedicationName(readJSONFieldOrEmptyString(JSONMed, "medication_name"));
 
 		this_med.setDose(readJSONFieldOrEmptyString(JSONMed, "dose"));
 		this_med.setFormulation(readJSONFieldOrEmptyString(JSONMed, "formulation"));

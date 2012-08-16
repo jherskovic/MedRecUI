@@ -111,7 +111,7 @@ public class ReviewLists {
 			
 			@Override
 			public void onFinishedLoading(FinishedLoadingEvent event) {
-				// TODO Auto-generated method stub
+						
 				ReviewLists.this.RenderTable(tblList1, data.getOriginalList(0));
 				ReviewLists.this.RenderTable(tblList2, data.getOriginalList(1));
 			}

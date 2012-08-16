@@ -11,6 +11,7 @@ import net.jorgeherskovic.medrec.client.event.FinishedPostingEvent;
 import net.jorgeherskovic.medrec.client.event.FinishedPostingEventHandler;
 import net.jorgeherskovic.medrec.client.event.RedrawEvent;
 import net.jorgeherskovic.medrec.client.event.FinishedLoadingEventHandler;
+import net.jorgeherskovic.medrec.shared.Lists;
 import net.jorgeherskovic.medrec.shared.Reconciliation;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -66,6 +67,9 @@ public class MedRec implements EntryPoint {
 			RESPONSE_URL="fake_response_url";
 		}
 		
+		Boolean choose_lists=(Window.Location.getParameterMap().containsKey("choose_list"));
+		Boolean show_summary=(!Window.Location.getParameterMap().containsKey("no_summary"));
+				
 		final RootPanel rootPanel = RootPanel.get("insert_app_here");
 
 		final String[] consolidatedHeadings = new String[] { "&nbsp;",
@@ -211,8 +215,6 @@ public class MedRec implements EntryPoint {
 
 				});
 		
-		/* Read data */
-		this.myData = new MedRecJSONData(JSON_URL, bus);
 		//this.myData = new SampleData();
 		//this.bus.fireEvent(new FinishedLoadingEvent());
 
@@ -241,7 +243,39 @@ public class MedRec implements EntryPoint {
 			}
 			
 		});
-		
-		final ReviewLists reviewListsForm=new ReviewLists(rootPanel, bus, myData);
+
+		/* Read data */
+		if (!choose_lists) {
+			this.myData = new MedRecJSONData(JSON_URL, bus);
+			if (show_summary) {
+				final ReviewLists reviewListsForm=new ReviewLists(rootPanel, bus, myData);
+			}
+			else
+			{
+				// In case NO SUMMARY is requested, go straight to the main event.
+				bus.addHandler(FinishedLoadingEvent.TYPE, new FinishedLoadingEventHandler() {
+
+					@Override
+					public void onFinishedLoading(FinishedLoadingEvent event) {
+						// TODO Auto-generated method stub
+						bus.fireEvent(new DoneReviewingListsEvent());
+					}
+					
+				});
+			}
+		}
+		else {
+			bus.addHandler(FinishedLoadingEvent.TYPE, new FinishedLoadingEventHandler() {
+
+				@Override
+				public void onFinishedLoading(FinishedLoadingEvent event) {
+					// TODO Auto-generated method stub
+					final ChooseLists chooseListsForm=new ChooseLists(rootPanel, bus, (Lists) myData, Window.Location.getParameter("choose_list"));
+				}
+				
+			});
+			this.myData = new Lists(JSON_URL, bus); 
+			// TODO: Create the chooser form and invoke it here.
+		}
 	}
 }

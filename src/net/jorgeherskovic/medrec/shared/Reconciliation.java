@@ -27,4 +27,8 @@ public abstract class Reconciliation {
 	public String[] getOriginalList(int list_number) {
 		return originalLists.get(list_number);
 	}
+	
+	public int getListCount() {
+		return originalLists.size();
+	}
 }
