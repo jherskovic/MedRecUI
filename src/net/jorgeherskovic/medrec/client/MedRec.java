@@ -16,6 +16,7 @@ import net.jorgeherskovic.medrec.shared.Reconciliation;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -24,16 +25,16 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.VerticalSplitPanel;
+import com.google.gwt.user.client.ui.SplitLayoutPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-@SuppressWarnings("deprecation")
 public class MedRec implements EntryPoint {
 
 	/**
@@ -70,7 +71,7 @@ public class MedRec implements EntryPoint {
 		Boolean choose_lists=(Window.Location.getParameterMap().containsKey("choose_list"));
 		Boolean show_summary=(!Window.Location.getParameterMap().containsKey("no_summary"));
 				
-		final RootPanel rootPanel = RootPanel.get("insert_app_here");
+		final RootLayoutPanel rootPanel = RootLayoutPanel.get();
 
 		final String[] consolidatedHeadings = new String[] { "&nbsp;",
 				"Origin", "Medication", "Dosage", "Sig", "Start", "End",
@@ -83,106 +84,119 @@ public class MedRec implements EntryPoint {
 		
 		final AbsolutePanel absolutePanel = new AbsolutePanel();
 		
+		// Need to use absolute pixel sizes at creation time because we create these widgets "in the dark", so to speak
+		absolutePanel.setPixelSize(Window.getClientWidth(), Window.getClientHeight()-150);
+		
 		//rootPanel.add(absolutePanel);
 		FlexTableRowDragController row_dc = new FlexTableRowDragController(
 				absolutePanel);
 
-		final VerticalSplitPanel rest = new VerticalSplitPanel();
-		rest.setSize("800px", "600px");
-		absolutePanel.add(rest);
-		rest.setSplitPosition("557px");
+		final SplitLayoutPanel rest = new SplitLayoutPanel();
+		rest.setPixelSize(absolutePanel.getOffsetWidth(), absolutePanel.getOffsetHeight());
+		//rest.setSplitPosition("557px");
 
-		final VerticalSplitPanel rest_of_rest = new VerticalSplitPanel();
-		rest_of_rest.setSize("800px", "557px");
-		final AbsolutePanel consolidatedPanel = new AbsolutePanel();
+		//final SplitLayoutPanel rest_of_rest = new SplitLayoutPanel();
+		//rest_of_rest.setSize("800px", "557px");
+		//final AbsolutePanel consolidatedPanel = new AbsolutePanel();
 		// absolutePanel.add(consolidatedPanel, 0, 58);
-		consolidatedPanel.setSize("800px", "252px");
-		rest_of_rest.setTopWidget(consolidatedPanel);
-		rest_of_rest.setSplitPosition("278px");
-		rest.setTopWidget(rest_of_rest);
+		//consolidatedPanel.setSize("800px", "252px");
+		//rest_of_rest.addNorth(consolidatedPanel, 252);
+		//rest.addNorth(rest_of_rest, 557);
 
-		final DockPanel dockPanel = new DockPanel();
-		dockPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		consolidatedPanel.add(dockPanel, 0, 0);
-		dockPanel.setSize("800px", "252px");
+		final DockLayoutPanel upperDockPanel = new DockLayoutPanel(Unit.PX);
+		//dockPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		rest.addNorth(upperDockPanel, 252);
+		//upperDockPanel.setSize("800px", "252px");
 
 		Label lblTopPanel = new Label("Unreconciled Record");
 		lblTopPanel.setStyleName("big-label");
 		lblTopPanel
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		dockPanel.add(lblTopPanel, DockPanel.NORTH);
+		upperDockPanel.addNorth(lblTopPanel, 30);
 
 		final DraggableFlexTable consolidatedTable = new DraggableFlexTable(
 				row_dc, null);
 		consolidatedTable.setStyleName("TableDesign");
-		dockPanel.add(consolidatedTable, DockPanel.NORTH);
+		upperDockPanel.add(consolidatedTable);
 		FlexTableRowDropController ct_dc = new FlexTableRowDropController(
 				consolidatedTable, this.bus);
 		@SuppressWarnings("unused")
 		final ConsolidatedRenderer conRenderer = new ConsolidatedRenderer(
 				consolidatedTable, consolidatedHeadings, bus);
 
-		final AbsolutePanel bottomPanel = new AbsolutePanel();
-		bottomPanel.setSize("800px", "30px");
-		rest.setBottomWidget(bottomPanel);
+		final DockLayoutPanel bottomPanel = new DockLayoutPanel(Unit.PX);
+		//bottomPanel.setSize("800px", "30px");
+		final Button btnDone = new Button("Done");
+		btnDone.setStyleName("doneButton");
+		btnDone.setSize("53px", "23px");
+		// spacer
+		AbsolutePanel spacer = new AbsolutePanel();
+		spacer.setSize("80px", "23px");
+		bottomPanel.addEast(spacer, 80);
+		bottomPanel.addEast(btnDone, 53);
+		//bottomPanel.add(new Label("PUF!"));
+		//rest.addSouth(bottomPanel, 30);
 
-		final AbsolutePanel reconciledPanel = new AbsolutePanel();
-		reconciledPanel.setSize("800px", "252px");
-		rest_of_rest.add(reconciledPanel);
+		//final AbsolutePanel reconciledPanel = new AbsolutePanel();
+		//reconciledPanel.setSize("800px", "252px");
+		//rest_of_rest.add(reconciledPanel);
 
-		final DockPanel dockPanel_1 = new DockPanel();
-		dockPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		reconciledPanel.add(dockPanel_1, 0, 0);
-		dockPanel_1.setSize("800px", "252px");
+		final DockLayoutPanel lowerDockPanel = new DockLayoutPanel(Unit.PX);
+		//dockPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		//lowerDockPanel.setSize("800px", "252px");
 
 		Label lblBottomPanel = new Label("Reconciled Record");
 		lblBottomPanel.setStyleName("big-label");
 		lblBottomPanel
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		dockPanel_1.add(lblBottomPanel, DockPanel.NORTH);
+		lowerDockPanel.addNorth(lblBottomPanel, 30);
 
 		final DraggableFlexTable reconciledTable = new DraggableFlexTable(
 				row_dc, null);
 		reconciledTable.setStyleName("TableDesign");
-		dockPanel_1.add(reconciledTable, DockPanel.CENTER);
+		
+		rest.addSouth(bottomPanel, 23);
+		lowerDockPanel.add(reconciledTable);
+
+		rest.add(lowerDockPanel);
+		absolutePanel.add(rest);
+		
 		FlexTableRowDropController rc_dc = new FlexTableRowDropController(
 				reconciledTable, bus);
-
+		
 		final ReconciledRenderer recRenderer = new ReconciledRenderer(
 				reconciledTable, reconciledHeadings, bus);
 
-		final Button btnDone = new Button("Done");
-		btnDone.setStyleName("doneButton");
-		bottomPanel.add(btnDone, 737, 0);
-		btnDone.setSize("53px", "30px");
-	 
 		/* Resize behavior */
 		final UIResizer resizer=new UIResizer() {
 			public void resizeUI(int width, int height) {
 				String new_width=width+"px";
 				
-				rootPanel.setHeight(height+"px");
-				rootPanel.setWidth(new_width);
-				absolutePanel.setHeight(height+"px");
-				absolutePanel.setWidth(new_width);
-				rest.setWidth(new_width);
-				rest.setHeight((height)+"px");
-				rest_of_rest.setWidth(new_width);
-				rest_of_rest.setHeight((height-44)+"px");
-				consolidatedPanel.setWidth(new_width);
-				dockPanel.setWidth(new_width);
-				dockPanel_1.setWidth(new_width);
-				bottomPanel.setWidth(new_width);
-				reconciledPanel.setWidth(new_width);
-				btnDone.removeFromParent();
-				bottomPanel.add(btnDone, width-83, 0);
+				//rootPanel.setHeight(height+"px");
+				//rootPanel.setWidth(new_width);
+				rootPanel.setPixelSize(width, height);
+				//absolutePanel.setHeight(height+"px");
+				//absolutePanel.setWidth(new_width);
+				absolutePanel.setPixelSize(width, height);
+				rest.setPixelSize(width, height);
+				
+				//rest.setHeight((height)+"px");
+				//rest_of_rest.setWidth(new_width);
+				//rest_of_rest.setHeight((height-44)+"px");
+				//consolidatedPanel.setWidth(new_width);
+				upperDockPanel.setWidth(new_width);
+				lowerDockPanel.setWidth(new_width);
+				//bottomPanel.setWidth(new_width);
+				//reconciledPanel.setWidth(new_width);
+				//btnDone.removeFromParent();
+				//bottomPanel.addWest(btnDone, width-83, 0);
 			}
 			
 		};
 		
 		ResizeHandler rh=new ResizeHandler() {
 			public void onResize(ResizeEvent event) {
-				int height=event.getHeight();
+				int height=event.getHeight() - 150; // Cheap trick
 				int width=event.getWidth();
 				
 				resizer.resizeUI(width, height);

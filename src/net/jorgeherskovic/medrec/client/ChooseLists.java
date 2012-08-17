@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.VerticalSplitPanel;
@@ -55,13 +56,13 @@ public class ChooseLists {
 		}
 	}
 		
-	public ChooseLists(RootPanel panelToAttachTo, final SimpleEventBus bus, final Lists data, final String responseURL) {		
+	public ChooseLists(RootLayoutPanel rootPanel, final SimpleEventBus bus, final Lists data, final String responseURL) {		
 		myWindow=new VerticalPanel();
 		cbs=new ArrayList<CheckBox>();
 		uris=new ArrayList<String>();
 		selected=new Stack<Integer>();
 		
-		panelToAttachTo.add(myWindow);
+		rootPanel.add(myWindow);
 		final Button btnNewButton = new Button("New button");
 		
 		for (int i=0; i<data.getListCount(); i++) {
